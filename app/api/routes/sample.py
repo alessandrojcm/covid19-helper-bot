@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.core.paginator import pagenation
+from app.core.paginator import pagination
 from app.models.sample import SampleInResponse
 from app.services.sample import get_sample
 import requests
@@ -19,7 +19,7 @@ async def sample(
     data = get_sample(data_json)
 
     total_count = len(data)
-    result = pagenation(page_number, page_size, total_count, data, start_page_as_1)
+    result = pagination(page_number, page_size, total_count, data, start_page_as_1)
 
     return SampleInResponse(
         pageNumber=page_number,
