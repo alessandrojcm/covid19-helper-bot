@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "covid19-helper-bot"
+version = "0.1.0"
+description = "A Whatsapp Bot to help get information about COVID19"
+authors = ["me@alessandrojcm.dev"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.45.0"
+pydantic = "^1.3"
+requests = "^2.22.0"
+loguru = "^0.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+black = {version = "^19.10b0", allow-prereleases = true}
+autopep8 = "^1.4.4"
+pre-commit = "^2.2.0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
