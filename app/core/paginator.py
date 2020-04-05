@@ -1,4 +1,4 @@
-def pagenation(
+def pagination(
     page_number=1, page_size=20, total_count=0, data=None, start_page_as_1=True
 ):
     """Return payload that contains metainformations about
