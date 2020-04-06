@@ -2,25 +2,17 @@ import logging
 import sys
 
 from loguru import logger
-from starlette.config import Config
-from starlette.datastructures import Secret
-
+from starlette.config import environ
 from app.core.logging import InterceptHandler
+from app.models import Config
 
-config = Config(".env")
-
-API_PREFIX = "/api"
-VERSION = "0.1.0"
-DEBUG: bool = config("DEBUG", cast=bool, default=False)
-TESTING: bool = config("TESTING", cast=bool, default=False)
-MAX_CONNECTIONS_COUNT: int = config("MAX_CONNECTIONS_COUNT", cast=int, default=10)
-MIN_CONNECTIONS_COUNT: int = config("MIN_CONNECTIONS_COUNT", cast=int, default=10)
-SECRET_KEY: Secret = config("SECRET_KEY", cast=Secret)
-
-PROJECT_NAME: str = config("PROJECT_NAME", default="COVID19 Helper Bot")
+if environ.get("ENVIRONMENT", "dev"):
+    config = Config(_env_file=".env")
+else:
+    config = Config()
 
 # logging configuration
-LOGGING_LEVEL = logging.DEBUG if DEBUG else logging.INFO
+LOGGING_LEVEL = logging.DEBUG if config.DEBUG else logging.INFO
 logging.basicConfig(
     handlers=[InterceptHandler(level=LOGGING_LEVEL)], level=LOGGING_LEVEL
 )
