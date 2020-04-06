@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from app.api.routes.api import router as api_router
 from app.core import config
 from app.core.events import create_start_app_handler
-from app.scripts import cli
 
 
 def get_application() -> FastAPI:
@@ -18,7 +17,3 @@ def get_application() -> FastAPI:
 
 
 app = get_application()
-
-# To be run in dev mode
-if __name__ == "__main__":
-    cli()

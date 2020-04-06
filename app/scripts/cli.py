@@ -41,3 +41,11 @@ def run(obj: dict, port, host):
     from app import get_application
 
     return run_app(get_application(), port, host)
+
+
+@cli.command()
+def generate_env():
+    """Generates a file .env with the default configuration values for development"""
+    from .generate_dev_env import generate_dev_env
+
+    generate_dev_env()
