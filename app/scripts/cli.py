@@ -51,3 +51,13 @@ def generate_env():
     click.echo("Generating .env file ...")
     generate_dev_env()
     click.echo(".env file generated correctly.")
+
+
+@cli.command()
+def create_collections():
+    """Creates all collections defined in the models folder"""
+    from .create_collections import create_collections
+
+    click.echo("Creating collections...")
+    create_collections()
+    click.echo("Collections created.")
