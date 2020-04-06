@@ -127,4 +127,10 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Intellig IDEAs IDEs config
 .idea
+
+# Env files
+.env
+.env.*

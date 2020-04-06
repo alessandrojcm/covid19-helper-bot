@@ -1,13 +1,16 @@
 import sys
 
 import click
+from click import Context
 
 from app.core import config
 
 
 @click.group()
-def cli():
+@click.pass_context
+def cli(ctx: Context):
     """COVID19 Whatsapp Bot CLI Helper"""
+    ctx.obj = dict(config)
     pass
 
 
@@ -25,15 +28,26 @@ def cli():
     help="Host on which the app will run",
     type=click.STRING,
 )
-def run(port, host):
+@click.pass_obj
+def run(obj: dict, port, host):
     """Runs the development server"""
-    if not config.DEBUG and not config.TESTING:
+    if not obj["DEBUG"] and not obj["TESTING"]:
         click.echo("Run from CLI cannot be used in production.", err=True)
         sys.exit(1)
-    elif config.TESTING:
+    elif obj["TESTING"]:
         sys.exit(0)
 
     from .server_runner import run_app
     from app import get_application
 
     return run_app(get_application(), port, host)
+
+
+@cli.command()
+def generate_env():
+    """Generates a file .env with the default configuration values for development"""
+    from .generate_dev_env import generate_dev_env
+
+    click.echo("Generating .env file ...")
+    generate_dev_env()
+    click.echo(".env file generated correctly.")
