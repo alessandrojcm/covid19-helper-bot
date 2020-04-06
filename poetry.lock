@@ -128,6 +128,24 @@ doc = ["mkdocs", "mkdocs-material", "markdown-include"]
 test = ["pytest (>=4.0.0)", "pytest-cov", "mypy", "black", "isort", "requests", "email-validator", "sqlalchemy", "databases", "orjson", "async-exit-stack", "async-generator"]
 
 [[package]]
+category = "main"
+description = "FaunaDB Python driver"
+name = "faunadb"
+optional = false
+python-versions = "*"
+version = "2.11.0"
+
+[package.dependencies]
+future = "*"
+iso8601 = "*"
+requests = "*"
+
+[package.extras]
+doc = ["sphinx", "sphinx-rtd-theme"]
+lint = ["pylint"]
+test = ["nose2", "nose2"]
+
+[[package]]
 category = "dev"
 description = "A platform independent file lock."
 name = "filelock"
