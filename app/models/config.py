@@ -1,5 +1,6 @@
-from pydantic import BaseSettings
+from pydantic import BaseSettings, AnyHttpUrl
 from pydantic.dataclasses import dataclass
+from pydantic.types import SecretStr
 
 from app.models.environments import Environments
 from app.models.logging_levels import LoggingLevels
@@ -14,6 +15,9 @@ class Config(BaseSettings):
     PROJECT_NAME: str = "COVID19 Helper Bot"
     LOGGING_LEVEL: LoggingLevels = LoggingLevels.INFO
     ENVIRONMENT: Environments = Environments.DEV
+    FAUNA_DB_HOST: AnyHttpUrl = "http://localhost:8443"
+    FAUNA_SERVER_KEY: SecretStr = "your_server_key_here"
+    FAUNA_DB_PORT: int = 8443
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
