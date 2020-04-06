@@ -1,4 +1,6 @@
-from app.models import DocumentBase, q
+from typing import Any
+
+from app.models.document_base import DocumentBase, q, FaunaClient
 
 
 class UserDocument(DocumentBase):
@@ -6,13 +8,17 @@ class UserDocument(DocumentBase):
     phone_number: str
     name: str
 
-    def __initialize_indexes(self):
+    def __init__(self, **data: Any):
+        super().__init__(**data)
+
+    @classmethod
+    def __initialize_indexes(cls, session: FaunaClient):
         # We initialize an index in order to get users by their phone number
-        self._fauna_client.query(
+        session.query(
             q.create_index(
                 {
                     "name": "get_by_phone",
-                    "source": q.collection(self._collection_name),
+                    "source": q.collection(cls._collection_name),
                     "values": [{"field": ["data", "phone_number"]}],
                 }
             )
