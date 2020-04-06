@@ -48,4 +48,6 @@ def generate_env():
     """Generates a file .env with the default configuration values for development"""
     from .generate_dev_env import generate_dev_env
 
+    click.echo("Generating .env file ...")
     generate_dev_env()
+    click.echo(".env file generated correctly.")
