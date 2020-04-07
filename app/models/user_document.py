@@ -12,7 +12,7 @@ class UserDocument(DocumentBase):
         super().__init__(**data)
 
     @classmethod
-    def __initialize_indexes(cls, session: FaunaClient):
+    def _DocumentBase__initialize_indexes(cls, session: FaunaClient):
         # We initialize an index in order to get users by their phone number
         session.query(
             q.create_index(
