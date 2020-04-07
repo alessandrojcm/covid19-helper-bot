@@ -8,6 +8,9 @@ class UserDocument(DocumentBase):
     phone_number: str
     name: str
 
+    class Config:
+        extra = "allow"
+
     def __init__(self, **data: Any):
         super(UserDocument, self).__init__(**data)
 

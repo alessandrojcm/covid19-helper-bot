@@ -1,23 +1,27 @@
 from abc import abstractmethod
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional, Union
 
+import pytz
 from faunadb import query as q
 from faunadb.errors import BadRequest
+from faunadb.objects import Ref, FaunaTime
 from loguru import logger
 from pydantic import BaseModel
 
-from app.core import session
+from app.core.engine import session
 
 
 class DocumentBase(BaseModel):
     _collection_name: str
-    created_at: datetime = datetime.now()
-    updated_at: datetime = datetime.now()
+    ref: Optional[Ref]
+    ts: Optional[str]
+    created_at: Union[datetime, FaunaTime] = datetime.now(pytz.timezone("UTC"))
+    updated_at: Union[datetime, FaunaTime] = datetime.now(pytz.timezone("UTC"))
 
     class Config:
         orm_mode = True
-        extra = "ignore"
+        arbitrary_types_allowed = True
 
     def __init__(self, **data: Any):
         super().__init__(**data)
@@ -67,15 +71,8 @@ class DocumentBase(BaseModel):
             )
         )
         result = session().query(
-            q.create(
-                q.collection(self._collection_name),
-                {
-                    **attributes,
-                    "create_at": datetime.now(),
-                    "updated_at": datetime.now(),
-                },
-            )
+            q.create(q.collection(self._collection_name), {"data": attributes},)
         )
-        logger.debug("Object saved with id {ts}".format(ts=result.ts))
+        logger.debug("Object saved with id {ts}".format(ts=result["ts"]))
 
-        return self.__init__(**result)
+        return self.__init__(ref=result["ref"], ts=result["ts"], **result["data"])
