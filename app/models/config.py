@@ -2,7 +2,7 @@ from pydantic import BaseSettings, AnyHttpUrl, validator
 from pydantic.dataclasses import dataclass
 from pydantic.types import SecretStr
 
-from app.models.environments import Environments
+from app.core.environments import Environments
 from app.models.logging_levels import LoggingLevels
 
 
