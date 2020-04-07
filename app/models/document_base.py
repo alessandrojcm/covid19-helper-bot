@@ -15,7 +15,6 @@ class DocumentBase(BaseModel, Singleton):
     _collection_name: str
     _fauna_client: FaunaClient
     _instance = None
-    ts: str
     created_at: datetime
     updated_at: datetime
 
@@ -59,7 +58,7 @@ class DocumentBase(BaseModel, Singleton):
         traverses trough the child class attributes
         :return: An instance of the newly saved object.
         """
-        attributes = self.dict(exclude={"ts"})
+        attributes = self.dict()
         logger.debug(
             "Saving object for collection {c} with attributes {attr}".format(
                 c=self._collection_name, attr=attributes
