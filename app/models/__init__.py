@@ -1,5 +1,6 @@
-from .config import *
-from .logging_levels import *
-from .environments import *
-from .document_base import *
-from .fauna_client_singleton import *
+from .config import Config
+from .logging_levels import LoggingLevels
+from .document_base import DocumentBase
+from .user_document import UserDocument
+
+DOCUMENTS = [UserDocument]

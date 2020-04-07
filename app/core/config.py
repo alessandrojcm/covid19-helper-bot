@@ -1,12 +1,14 @@
 import logging
 import sys
+from os import environ
 
 from loguru import logger
-from starlette.config import environ
-from app.core.logging import InterceptHandler
-from app.models import Config
 
-if environ.get("ENVIRONMENT", "dev"):
+from app.models.config import Config
+from .logging import InterceptHandler
+from .environments import Environments
+
+if environ.get("ENVIRONMENT", Environments.DEV):
     config = Config(_env_file=".env")
 else:
     config = Config()

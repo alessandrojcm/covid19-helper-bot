@@ -22,3 +22,12 @@ def test_cli_run(debug, expected, config: Config):
     result = runner.invoke(run, obj=dict(config))
 
     assert result.exit_code == expected
+
+
+def test_create_collection():
+    from app.scripts.cli import create_collections
+
+    runner = CliRunner()
+    result = runner.invoke(create_collections)
+
+    assert result.exit_code == 0

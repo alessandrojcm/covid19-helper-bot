@@ -2,7 +2,7 @@ import sys
 import inspect
 from pathlib import Path
 
-from app.core.config import Config
+from app.models import Config
 
 
 def generate_dev_env():
