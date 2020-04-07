@@ -1,5 +1,5 @@
 from .core import config, session
-from .models import DOCUMENTS, DocumentBase
+from .models import DOCUMENTS
 from .app import get_application
 from .scripts import cli
 
