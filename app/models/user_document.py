@@ -22,9 +22,19 @@ class UserDocument(DocumentBase):
         session().query(
             q.create_index(
                 {
-                    "name": "get_by_phone",
+                    "name": "users_get_by_phone",
                     "source": q.collection(cls._collection_name),
-                    "values": [{"field": ["data", "phone_number"]}],
+                    "terms": [{"field": ["data", "pone_number"]}],
+                    "values": [{"field": ["name", "phone_number"]}, {"field": ["ref"]}],
+                }
+            )
+        )
+        session().query(
+            q.create_index(
+                {
+                    "name": "all_users",
+                    "source": q.collection(cls._collection_name),
+                    "values": [{"field": ["name", "phone_number"]}, {"field": ["ref"]}],
                 }
             )
         )
