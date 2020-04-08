@@ -10,7 +10,7 @@ user_greeting = APIRouter()
 
 @logger.catch
 @user_greeting.post("/greeting")
-async def greet_user(request: AutopilotRequest):
+def greet_user(request: AutopilotRequest):
     try:
         country = phone_to_country(request.UserIdentifier)
     except ValueError:

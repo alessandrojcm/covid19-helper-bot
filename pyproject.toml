@@ -6,13 +6,13 @@ authors = ["me@alessandrojcm.dev"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-fastapi = "^0.45.0"
 pydantic = {extras = ["dotenv"], version = "^1.4"}
 requests = "^2.22.0"
 loguru = "^0.4.0"
 faunadb = "^2.11.0"
 pytz = "^2019.3"
 phonenumbers = "^8.12.1"
+fastapi = "^0.54.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
