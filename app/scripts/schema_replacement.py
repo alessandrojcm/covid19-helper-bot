@@ -23,7 +23,7 @@ def replace_variables():
     for key, val in config:
         if schema.find(key) != -1:
             logger.info("Replacing {k} for {v}".format(k=key, v=val))
-            schema = re.sub(r"\b{key}".format(key=key), val, schema)
+            schema = re.sub(r"\b%{key}%|\B%{key}%".format(key=key), val, schema)
     logger.info("Writing schema file as schema_ready.json...")
     with open(path.joinpath("assistant/schema_ready.json"), "w") as ready_schema:
         # Prettify the file

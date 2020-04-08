@@ -58,7 +58,7 @@
             "actions" : {
                 "actions" : [
                     {
-                        "redirect" : "TWILIO_ENDPOINT/API_PREFIX/AUTOPILOT_ENDPOINT_PREFIX/greeting"
+                        "redirect" : "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/greeting"
                     },
                     { "listen" : true }
                 ]
