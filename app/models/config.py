@@ -9,7 +9,7 @@ from app.models.logging_levels import LoggingLevels
 @dataclass()
 class Config(BaseSettings):
     API_PREFIX: str = "/api"
-    AUTOPILOT_API_PREFIX: str = "/twiml"
+    AUTOPILOT_API_PREFIX: str = "/autopilot"
     VERSION: str = "0.1.0"
     DEBUG: bool = False
     TESTING: bool = False
