@@ -61,3 +61,11 @@ def create_collections():
     click.echo("Creating collections...")
     create_collections()
     click.echo("Collections created.")
+
+
+@cli.command()
+def prepare_schema():
+    """Replaces the variables in the assistant schema for their final values"""
+    from .schema_replacement import replace_variables
+
+    replace_variables()

@@ -41,19 +41,6 @@
     "fieldTypes" : [],
     "tasks" : [
         {
-            "uniqueName" : "collect_fallback",
-            "actions" : {
-                "actions" : [
-                    {
-                        "say" : "Looks like I'm having trouble. Apologies for that. Let's start again, how can I help you today?"
-                    },
-                    { "listen" : true }
-                ]
-            },
-            "fields" : [],
-            "samples" : []
-        },
-        {
             "uniqueName" : "fallback",
             "actions" : {
                 "actions" : [
@@ -67,92 +54,11 @@
             "samples" : []
         },
         {
-            "uniqueName" : "goodbye",
-            "actions" : {
-                "actions" : [
-                    {
-                        "say" : "Thank you! Please reach out again if you need anything. Goodbye."
-                    }
-                ]
-            },
-            "fields" : [],
-            "samples" : [
-                {
-                    "language" : "en-US",
-                    "taggedText" : "that's all for today"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "that is all thank you"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "no thanks"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "that would be all"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "that would be all thanks"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "no"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "no thanks"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "go away"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "cancel"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "goodbye"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "goodnight"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "stop talking"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "stop"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "see ya"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "bye bye"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "that's all"
-                },
-                {
-                    "language" : "en-US",
-                    "taggedText" : "good bye"
-                }
-            ]
-        },
-        {
             "uniqueName" : "greeting",
             "actions" : {
                 "actions" : [
                     {
-                        "say" : "Hello, what can I help you with today?"
+                        "redirect" : "TWILIO_ENDPOINT/API_PREFIX/AUTOPILOT_ENDPOINT_PREFIX/greeting"
                     },
                     { "listen" : true }
                 ]
