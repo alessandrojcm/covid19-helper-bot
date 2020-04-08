@@ -9,6 +9,7 @@ from app.models.logging_levels import LoggingLevels
 @dataclass()
 class Config(BaseSettings):
     API_PREFIX: str = "/api"
+    AUTOPILOT_API_PREFIX: str = "/autopilot"
     VERSION: str = "0.1.0"
     DEBUG: bool = False
     TESTING: bool = False
@@ -17,6 +18,7 @@ class Config(BaseSettings):
     ENVIRONMENT: Environments = Environments.DEV
     FAUNA_DB_URL: AnyHttpUrl = "http://localhost:8443"
     FAUNA_SERVER_KEY: SecretStr = "your_server_key_here"
+    TWILIO_ENDPOINT: AnyHttpUrl = "http://localhost:5000"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
