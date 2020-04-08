@@ -136,3 +136,5 @@ dmypy.json
 .env.*
 
 **/schema_ready.json
+*.zip
+requirements.txt

@@ -1,0 +1,18 @@
+language: python
+python:
+  - "3.8"
+install:
+  - pip install poetry
+  - poetry export -r requirements > requirements.txt
+  - pip install -r requirements.txt
+  - python main.py prepare-schema
+  - npm i -g twilio-cli
+  - twilio plugins:install @dabblelab/plugin-autopilot
+deploy:
+  provider: heroku
+  api_key: '$HEROKU_AUTH_TOKEN'
+  run:
+    - twilio autopilot:update -s=./assistant/schema_ready.json --unique-name=TwilioHackathon
+  app:
+    master: twilio-dev-hackathon
+    develop: twilio-dev-hackathon-dev
