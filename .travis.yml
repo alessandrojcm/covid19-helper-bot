@@ -1,12 +1,12 @@
 language: generic
 install:
-  - ./install.sh
+  - bash ./install.sh
 deploy:
   provider: heroku
   api_key: '$HEROKU_AUTH_TOKEN'
   skip_cleanup: true # So Travis does not deleted the generated requirements.txt
   run:
-    - ./after_deploy.sh
+    - bash ./after_deploy.sh
   app:
     master: twilio-dev-hackathon
     develop: twilio-dev-hackathon-dev
