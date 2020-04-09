@@ -9,8 +9,8 @@ pip install --user -r requirements.txt
 npm i -g twilio-cli
 
 # Generating schema
-python -m poetry run main.py prepare-schema
+python main.py prepare-schema
 
 # Updating assistant
 twilio plugins:install @dabblelab/plugin-autopilot
-twilio autopilot:update -s=./assistant/schema_ready.json --unique-name=COVID19-Bot
+twilio autopilot:update -s=assistant/schema_ready.json --unique-name=COVID19-Bot
