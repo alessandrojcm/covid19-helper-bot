@@ -14,6 +14,8 @@ deploy:
   api_key: '$HEROKU_AUTH_TOKEN'
   cleanup: false # So Travis does not deleted the generated requirements.txt
   run:
+    - sudo apt install nodejs
+    - sudo apt install npm
     - bash ./after_deploy.sh
   app:
     master: twilio-dev-hackathon
