@@ -1,12 +1,12 @@
-language: python
+language: generic
+dist: bionic
 python:
   - "3.8"
 node_js:
-  - "node"
+  - "13.12.0"
 install:
-  - pip install poetry
-  - poetry export -f requirements.txt > requirements.txt
-  - pip install -r requirements.txt
+  - sudo chown -R travis:travis /home/travis/
+  - bash ./install.sh
 script:
   - echo "Test not implemented yet"
 deploy:
@@ -14,8 +14,7 @@ deploy:
   api_key: '$HEROKU_AUTH_TOKEN'
   cleanup: false # So Travis does not deleted the generated requirements.txt
   run:
-    - sudo apt install nodejs
-    - sudo apt install npm
+    - sudo chown -R travis:travis /home/travis/
     - bash ./after_deploy.sh
   app:
     master: twilio-dev-hackathon
