@@ -29,5 +29,5 @@ class Config(BaseSettings):
     @validator("FAUNA_DB_URL")
     def check_schema(cls, v, values):
         if values["ENVIRONMENT"] != Environments.DEV and v.scheme != "https":
-            raise RuntimeError("Cannot use non https out of dev environment.")
+            return "https://db.fauna.com"
         return v

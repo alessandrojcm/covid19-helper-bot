@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from loguru import logger
+from phonenumbers import NumberParseException
 
 from app.models import AutopilotRequest, UserDocument, Say, Listen
 from app.models.twilio_actions import ActionResponse
@@ -13,8 +14,8 @@ user_greeting = APIRouter()
 def greet_user(request: AutopilotRequest):
     try:
         country = phone_to_country(request.UserIdentifier)
-    except ValueError:
-        raise HTTPException(status_code=400)
+    except NumberParseException:
+        raise HTTPException(status_code=400, detail="Invalid phone number")
 
     user = UserDocument.get_by_phone(request.UserIdentifier)
 
