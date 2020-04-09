@@ -1,18 +1,12 @@
-language: python
-python:
-  - "3.8"
+language: generic
 install:
-  - pip install poetry
-  - poetry export -r requirements > requirements.txt
-  - pip install -r requirements.txt
-  - python main.py prepare-schema
-  - npm i -g twilio-cli
-  - twilio plugins:install @dabblelab/plugin-autopilot
+  - ./install.sh
 deploy:
   provider: heroku
   api_key: '$HEROKU_AUTH_TOKEN'
+  skip_cleanup: true # So Travis does not deleted the generated requirements.txt
   run:
-    - twilio autopilot:update -s=./assistant/schema_ready.json --unique-name=TwilioHackathon
+    - ./after_deploy.sh
   app:
     master: twilio-dev-hackathon
     develop: twilio-dev-hackathon-dev
