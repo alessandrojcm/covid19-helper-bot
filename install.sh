@@ -1,5 +1,5 @@
 #!/bin/bash
 
 pip install poetry
-poetry export -r requirements > requirements.txt
+poetry export -f requirements.txt > requirements.txt
 pip install -r requirements.txt
