@@ -547,8 +547,8 @@ version = "1.0.1"
 dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 
 [metadata]
-content-hash = "058c8b841091aa9904fb0d62df5b5582cbd9648d36c0a15a01ec7e0253a77d82"
-python-versions = "^3.8"
+content-hash = "26e61aed1ab76ffbd86aca3cb79eeb82f304dd36114f509f7389cbcecc0ed022"
+python-versions = "3.8.2"
 
 [metadata.files]
 appdirs = [
