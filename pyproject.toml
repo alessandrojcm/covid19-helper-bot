@@ -5,7 +5,7 @@ description = "A Whatsapp Bot to help get information about COVID19"
 authors = ["me@alessandrojcm.dev"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "3.8.2"
 pydantic = {extras = ["dotenv"], version = "^1.4"}
 requests = "^2.22.0"
 loguru = "^0.4.0"
