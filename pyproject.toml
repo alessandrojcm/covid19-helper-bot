@@ -13,6 +13,8 @@ faunadb = "^2.11.0"
 pytz = "^2019.3"
 phonenumbers = "^8.12.1"
 fastapi = "^0.54.1"
+gunicorn = "^20.0.4"
+uvicorn = "^0.11.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
