@@ -3,8 +3,7 @@ from loguru import logger
 from phonenumbers import NumberParseException
 
 from app.decorators import error_fallback_action
-from app.models import AutopilotRequest, UserDocument, Say, Listen
-from app.models.twilio_actions import ActionResponse
+from app.models import AutopilotRequest, UserDocument
 from app.utils import phone_to_country
 
 user_greeting = APIRouter()
@@ -22,25 +21,26 @@ def greet_user(data: AutopilotRequest = Depends()):
 
     user = UserDocument.get_by_phone(request.user_identifier)
 
+    # TODO: Had to remove the Pydantic models because there are some quirks rendering correct json data
+    # need to find a workaround around this
     if user is not None:
-        return ActionResponse(
-            actions=[
-                Say(
-                    say="Hi there! {name}, what can I do for you today?".format(
+        return {
+            "actions": [
+                {
+                    "say": "Hi there! {name}, what can I do for you today?".format(
                         name=user.name
                     )
-                ),
-                Listen(tasks=["menu-description"]),
+                },
+                {"listen": {"tasks": ["menu-description"]}},
             ]
-        )
-
-    return ActionResponse(
-        actions=[
-            Say(
-                say="Hello there! Looks like you're writing from {country}, great to meet you! Can I have your name?".format(
+        }
+    return {
+        "actions": [
+            {
+                "say": "Hello there! Looks like you're writing from {country}, great to meet you! Can I have your name?".format(
                     country=country
                 )
-            ),
-            Listen(tasks=["store-user", "menu-description"]),
+            },
+            {"listen": {"tasks": ["menu-description", "store-user"]}},
         ]
-    )
+    }
