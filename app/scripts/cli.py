@@ -4,6 +4,7 @@ import click
 from click import Context
 
 from app.core import config
+from app.models import Config
 
 
 @click.group()
@@ -40,7 +41,7 @@ def run(obj: dict, port, host):
     from .server_runner import run_app
     from app import get_application
 
-    return run_app(get_application(), port, host)
+    return run_app(get_application(config), port, host)
 
 
 @cli.command()
