@@ -4,9 +4,9 @@ from os import environ
 
 from loguru import logger
 
-from app.models.config import Config
+from ..models.config import Config
+from app.models.environments import Environments
 from .logging import InterceptHandler
-from .environments import Environments
 
 if environ.get("ENVIRONMENT", Environments.DEV):
     config = Config(_env_file=".env")

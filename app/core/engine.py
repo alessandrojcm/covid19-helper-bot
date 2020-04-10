@@ -5,7 +5,7 @@ _session = None
 
 def session():
     from .config import config
-    from .environments import Environments
+    from app.models.environments import Environments
 
     global _session
     if _session is None and config.ENVIRONMENT == Environments.DEV:

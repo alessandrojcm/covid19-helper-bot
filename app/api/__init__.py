@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from .routes.autopilot import autopilot
 from .hello_world import hello_world_router
+from .routes.autopilot import autopilot
 from ..core import config
 
 router = APIRouter()

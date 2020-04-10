@@ -1,5 +1,5 @@
-from phonenumbers import geocoder
 import phonenumbers
+from phonenumbers import geocoder
 
 
 def phone_to_country(number: str):

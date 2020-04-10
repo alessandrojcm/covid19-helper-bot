@@ -4,9 +4,9 @@ from fastapi import FastAPI
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 from app.api import router
-from app.services import init_sentry
-from app.core.environments import Environments
+from app.models.environments import Environments
 from app.middlewares import MIDDLEWARES
+from app.services import init_sentry
 
 
 def get_application(config) -> Union[FastAPI, SentryAsgiMiddleware]:

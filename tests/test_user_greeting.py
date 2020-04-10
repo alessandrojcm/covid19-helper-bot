@@ -1,7 +1,4 @@
-import json
-
 from app.models import AutopilotRequest, UserDocument
-from app.models.twilio_actions import ActionResponse, Say, Listen
 
 
 def test_greet_user_found(app, user: UserDocument):

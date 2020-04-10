@@ -1,10 +1,10 @@
 from traceback import format_exception_only
 
-from sentry_sdk import init, capture_message as log_to_sentry
 from loguru import logger
+from sentry_sdk import init, capture_message as log_to_sentry
 
 from app.core import config
-from app.core.environments import Environments
+from app.models.environments import Environments
 
 
 def init_sentry():
