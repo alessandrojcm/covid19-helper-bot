@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Form, Depends
 from loguru import logger
 from phonenumbers import NumberParseException
 
@@ -11,13 +11,15 @@ user_greeting = APIRouter()
 
 @logger.catch
 @user_greeting.post("/greeting")
-def greet_user(request: AutopilotRequest):
+@error_fallback_action
+def greet_user(data: AutopilotRequest = Depends()):
+    request = data['data']
     try:
-        country = phone_to_country(request.UserIdentifier)
+        country = phone_to_country(request.user_identifier)
     except NumberParseException:
         raise HTTPException(status_code=400, detail="Invalid phone number")
 
-    user = UserDocument.get_by_phone(request.UserIdentifier)
+    user = UserDocument.get_by_phone(request.user_identifier)
 
     if user is not None:
         return ActionResponse(
