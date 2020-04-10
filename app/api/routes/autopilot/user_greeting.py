@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Form, Depends
 from loguru import logger
 from phonenumbers import NumberParseException
 
+from app.decorators import error_fallback_action
 from app.models import AutopilotRequest, UserDocument, Say, Listen
 from app.models.twilio_actions import ActionResponse
 from app.utils import phone_to_country
@@ -13,7 +14,7 @@ user_greeting = APIRouter()
 @user_greeting.post("/greeting")
 @error_fallback_action
 def greet_user(data: AutopilotRequest = Depends()):
-    request = data['data']
+    request = data["data"]
     try:
         country = phone_to_country(request.user_identifier)
     except NumberParseException:
