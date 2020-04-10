@@ -21,6 +21,7 @@ class Config(BaseSettings):
     FAUNA_DB_URL: AnyHttpUrl = "http://localhost:8443"
     FAUNA_SERVER_KEY: SecretStr = "your_server_key_here"
     TWILIO_ENDPOINT: AnyHttpUrl = "http://localhost:5000"
+    TWILIO_AUTH_TOKEN: Optional[str]
     SENTRY_DSN: Optional[AnyHttpUrl]
 
     def __init__(self, **kwargs):
@@ -33,4 +34,10 @@ class Config(BaseSettings):
     def check_schema(cls, v, values):
         if values["ENVIRONMENT"] != Environments.DEV and v.scheme != "https":
             return "https://db.fauna.com"
+        return v
+
+    @validator("TWILIO_AUTH_TOKEN")
+    def check_for_twilio_token(cls, v, values):
+        if values["ENVIRONMENT"] != Environments.DEV and not v:
+            raise RuntimeError("TWILIO_AUTH_TOKEN must be set")
         return v
