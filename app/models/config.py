@@ -30,14 +30,12 @@ class Config(BaseSettings):
     def __post_init_post_parse__(self):
         self.LOGGING_LEVEL = LoggingLevels.DEBUG if self.DEBUG else LoggingLevels.INFO
 
-    @validator("FAUNA_DB_URL")
-    def check_schema(cls, v, values):
-        if values["ENVIRONMENT"] != Environments.DEV and v.scheme != "https":
-            return "https://db.fauna.com"
-        return v
-
     @validator("TWILIO_AUTH_TOKEN")
     def check_for_twilio_token(cls, v, values):
-        if values["ENVIRONMENT"] != Environments.DEV and not v:
+        if (
+            "ENVIRONMENT" in values
+            and values["ENVIRONMENT"] != Environments.DEV
+            and not v
+        ):
             raise RuntimeError("TWILIO_AUTH_TOKEN must be set")
         return v

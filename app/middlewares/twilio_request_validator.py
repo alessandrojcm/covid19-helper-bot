@@ -18,7 +18,9 @@ class TwilioRequestValidator(BaseHTTPMiddleware):
         validator = RequestValidator(config.TWILIO_AUTH_TOKEN)
 
         is_valid = validator.validate(
-            request.url, request.form(), request.headers.get("X-TWILIO-SIGNATURE", "")
+            str(request.url),
+            await request.form(),
+            request.headers.get("X-TWILIO-SIGNATURE", ""),
         )
 
         if not is_valid:
