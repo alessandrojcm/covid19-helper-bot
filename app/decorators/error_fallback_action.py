@@ -3,7 +3,7 @@ from functools import wraps
 from fastapi import Response
 
 from app.models import Say
-from app.core import capture_message
+from app.services import capture_message
 
 
 def error_fallback_action(func):
