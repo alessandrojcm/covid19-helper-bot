@@ -4,8 +4,8 @@ import pytest
 from starlette.testclient import TestClient
 
 from app import get_application
-from app.core.environments import Environments
 from app.core.config import config
+from app.models.environments import Environments
 
 environ["ENVIRONMENT"] = Environments.DEV
 

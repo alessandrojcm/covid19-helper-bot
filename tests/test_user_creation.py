@@ -2,7 +2,7 @@ from os import environ
 
 import pytest
 
-from app.models import Config, UserDocument
+from app.models import UserDocument
 
 
 @pytest.fixture(scope="module")

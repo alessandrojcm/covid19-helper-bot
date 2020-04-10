@@ -1,10 +1,15 @@
+from typing import Union
+
 from fastapi import FastAPI
+from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
 from app.api import router
-from app.core.environments import Environments
+from app.models.environments import Environments
+from app.middlewares import MIDDLEWARES
+from app.services import init_sentry
 
 
-def get_application(config) -> FastAPI:
+def get_application(config) -> Union[FastAPI, SentryAsgiMiddleware]:
     application = FastAPI(
         title=config.PROJECT_NAME, debug=config.DEBUG, version=config.VERSION
     )
@@ -13,12 +18,10 @@ def get_application(config) -> FastAPI:
 
     if config.ENVIRONMENT == Environments.DEV:
         return application
-    return sentry_handler(config)(application)
+    init_middlewares(application)
+    return SentryAsgiMiddleware(application)
 
 
-def sentry_handler(config):
-    import sentry_sdk
-    from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
-
-    sentry_sdk.init(dsn=config.SENTRY_DSN)
-    return SentryAsgiMiddleware
+def init_middlewares(application):
+    [application.add_middleware(middleware) for middleware in MIDDLEWARES]
+    init_sentry()
