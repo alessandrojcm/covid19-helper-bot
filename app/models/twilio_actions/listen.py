@@ -4,5 +4,5 @@ from pydantic import BaseModel
 
 
 class Listen(BaseModel):
-    listen: Optional[bool]
+    listen: bool = True
     tasks: Optional[List[str]]
