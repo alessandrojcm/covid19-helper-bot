@@ -44,3 +44,51 @@ def greet_user(UserIdentifier: str = Form(...)):
             {"listen": {"tasks": ["menu-description", "store-user"]}},
         ]
     }
+
+
+@logger.catch
+@error_fallback_action
+@user_greeting.post("/can-have-name")
+def can_have_name(memory: dict = Form(...)):
+    answer = memory["twilio"]["collected_data"]["can_have_name"]["answers"][
+        "can_have_name"
+    ]
+
+    if answer == "Yes":
+        return {"actions": [{"redirect": "task://store-user"}]}
+    return {
+        "actions": [
+            {
+                "say": """Ok no biggie! Just keep in mind that I won't be able to offer you all my
+                        capabilities unless I have your name.\n If you change you"""
+            },
+            {"redirect": "task://menu-description"},
+        ]
+    }
+
+
+@logger.catch
+@error_fallback_action(extra_action={"redirect": "task://store-user"})
+@user_greeting.post("/store-user")
+def store_user(UserIdentifier: str = Form(...), memory: dict = Form(...)):
+    name = memory["twilio"]["collected_data"]["collect-name"]["answers"]["first_name"]
+
+    try:
+        country = phone_to_country(UserIdentifier)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid phone number")
+    new_user = UserDocument(
+        name=name, phone_number=UserIdentifier, country=country
+    ).save()
+
+    return {
+        "actions": [
+            {"remember": {"name": new_user.name, "country": new_user.country}},
+            {
+                "say": "Great! {name} I got that, let's begin!".format(
+                    name=new_user.name
+                )
+            },
+            {"redirect": "task://menu-description"},
+        ]
+    }
