@@ -1,7 +1,7 @@
 from app.models import UserDocument
 
 
-def test_greet_user_found(app, user: UserDocument):
+def test_greet_user_found(app, user: UserDocument, action_schema):
     response = app.post(
         "/api/autopilot/greeting",
         data={"UserIdentifier": user.phone_number},
@@ -10,11 +10,11 @@ def test_greet_user_found(app, user: UserDocument):
             "X-Twilio-Signature": "",
         },
     )
-    assert response.json()
+    assert action_schema(response.json()) is None
     assert response.status_code == 200
 
 
-def test_greet_user_not_found(app):
+def test_greet_user_not_found(app, action_schema):
     response = app.post(
         "/api/autopilot/greeting",
         data={"UserIdentifier": "+15555555"},
@@ -23,7 +23,7 @@ def test_greet_user_not_found(app):
             "X-Twilio-Signature": "",
         },
     )
-    assert response.json()
+    assert action_schema(response.json()) is None
     assert response.status_code == 200
 
 

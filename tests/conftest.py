@@ -1,7 +1,10 @@
+import json
 from os import environ
+from functools import partial
 
 import pytest
 from starlette.testclient import TestClient
+import jsonschema
 
 from app import get_application
 from app.core.config import config as app_config
@@ -35,3 +38,18 @@ def user():
     yield user
 
     user.delete()
+
+
+@pytest.fixture(scope="session")
+def action_schema():
+    """
+        Load schema to validate Autopilot Actions against
+    """
+    schema = {}
+    with open("./actions_schema.json") as file:
+        schema = json.loads(file.read())
+
+    def validator(instance):
+        return jsonschema.validate(instance, schema)
+
+    yield validator

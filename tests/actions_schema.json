@@ -1,0 +1,584 @@
+{
+    "sl_translate":"sl_none",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "say": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "required": [
+                        "speech"
+                    ],
+                    "type": "object",
+                    "properties": {
+                        "speech": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "show": {
+            "required": [
+                "body"
+            ],
+            "type": "object",
+            "properties": {
+                "body": {
+                    "type": "string"
+                },
+                "images": {
+                    "required": [
+                        "url"
+                    ],
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "url": {
+                                "type": "string"
+                            },
+                            "label": {
+                                "type": "string"
+                            }
+                        },
+                        "additionalProperties": false
+                    }
+                },
+                "subject": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "redirect": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "uri"
+                    ],
+                    "properties": {
+                        "uri": {
+                            "type": "string"
+                        },
+                        "method": {
+                            "type": "string"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "listen": {
+            "anyOf": [
+                {
+                    "type": "boolean"
+                },
+                {
+                    "type": "object",
+                    "properties": {
+                        "tasks": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "voice_digits": {
+                            "type": "object",
+                            "properties": {
+                                "num_digits": {
+                                    "type": "integer"
+                                },
+                                "finish_on_key": {
+                                    "type": "string"
+                                },
+                                "redirects": {
+                                    "type": "object",
+                                    "patternProperties": {
+                                        "^[0-9#\\*]+$": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "barge": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "media_redirect": {
+                            "$ref": "#/definitions/redirect"
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "name": {
+            "type": "string"
+        },
+        "messages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "properties": {
+                    "say": {
+                        "$ref": "#/definitions/say"
+                    },
+                    "show": {
+                        "$ref": "#/definitions/show"
+                    }
+                },
+                "additionalProperties": false,
+                "anyOf": [
+                    {
+                        "required": [
+                            "say"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "show"
+                        ]
+                    }
+                ]
+            }
+        },
+        "max_attempts": {
+            "type": "object",
+            "required": [
+                "redirect"
+            ],
+            "properties": {
+                "num_attempts": {
+                    "type": "integer",
+                    "default": 0
+                },
+                "redirect": {
+                    "$ref": "#/definitions/redirect"
+                }
+            },
+            "additionalProperties": false
+        },
+        "handoff": {
+            "type": "object",
+            "required": [
+                "channel",
+                "uri"
+            ],
+            "properties": {
+                "channel": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "params": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "wait_url": {
+                    "type": "string"
+                },
+                "wait_url_method": {
+                    "type": "string"
+                },
+                "action": {
+                    "type": "string"
+                },
+                "action_method": {
+                    "type": "string"
+                },
+                "priority": {
+                    "type": "string"
+                },
+                "timeout": {
+                    "type": "string"
+                },
+                "voice_status_callback_url": {
+                    "type": "string"
+                },
+                "voice_status_callback_method": {
+                    "type": "string"
+                }
+            },
+            "additionalProperties": false
+        },
+        "play": {
+            "anyOf": [
+                {
+                    "type": "string"
+                },
+                {
+                    "type":  "object",
+                    "required": [
+                        "url"
+                    ],
+                    "properties": {
+                        "url": {
+                            "type": "string"
+                        },
+                        "loop": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        }
+    },
+    "required": [
+        "actions"
+    ],
+    "type": "object",
+    "properties": {
+        "actions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "say": {
+                        "$ref": "#/definitions/say"
+                    },
+                    "show": {
+                        "$ref": "#/definitions/show"
+                    },
+                    "listen": {
+                        "$ref": "#/definitions/listen"
+                    },
+                    "redirect": {
+                        "$ref": "#/definitions/redirect"
+                    },
+                    "handoff": {
+                        "$ref": "#/definitions/handoff"
+                    },
+                    "remember": {
+                        "type": "object"
+                    },
+                    "collect": {
+                        "type": "object",
+                        "required": [
+                            "name",
+                            "questions",
+                            "on_complete"
+                        ],
+                        "properties": {
+                            "name": {
+                                "$ref": "#/definitions/name"
+                            },
+                            "questions": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                    "type": "object",
+                                    "required": [
+                                        "question",
+                                        "name"
+                                    ],
+                                    "properties": {
+                                        "question": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "required": [
+                                                        "say"
+                                                    ],
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "say": {
+                                                            "$ref": "#/definitions/say"
+                                                        }
+                                                    },
+                                                    "additionalProperties": false
+                                                }
+                                            ]
+                                        },
+                                        "name": {
+                                            "$ref": "#/definitions/name"
+                                        },
+                                        "type": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "null"
+                                                }
+                                            ]
+                                        },
+                                        "prefill": {
+                                            "type": "string"
+                                        },
+                                        "validate": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "minProperties": 1,
+                                                    "properties": {
+                                                        "allowed_values": {
+                                                            "type": "object",
+                                                            "required": [
+                                                                "list"
+                                                            ],
+                                                            "properties": {
+                                                                "list": {
+                                                                    "type": "array",
+                                                                    "minItems": 1,
+                                                                    "items": {
+                                                                        "type": "string"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "additionalProperties": false
+                                                        },
+                                                        "allowed_types": {
+                                                            "type": "object",
+                                                            "required": [
+                                                                "list"
+                                                            ],
+                                                            "properties": {
+                                                                "list": {
+                                                                    "type": "array",
+                                                                    "minItems": 1,
+                                                                    "items": {
+                                                                        "type": "string"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "additionalProperties": false
+                                                        },
+                                                        "webhook": {
+                                                            "anyOf": [
+                                                                {
+                                                                    "type": "string"
+                                                                },
+                                                                {
+                                                                    "type": "object",
+                                                                    "required": [
+                                                                        "url"
+                                                                    ],
+                                                                    "properties": {
+                                                                        "url": {
+                                                                            "type": "string"
+                                                                        },
+                                                                        "method": {
+                                                                            "type": "string"
+                                                                        }
+                                                                    },
+                                                                    "additionalProperties": false
+                                                                }
+                                                            ]
+                                                        },
+                                                        "on_success": {
+                                                            "type": "object",
+                                                            "required": [
+                                                                "say"
+                                                            ],
+                                                            "properties": {
+                                                                "say": {
+                                                                    "$ref": "#/definitions/say"
+                                                                }
+                                                            },
+                                                            "additionalProperties": false
+                                                        },
+                                                        "on_failure": {
+                                                            "type": "object",
+                                                            "required": [
+                                                                "messages"
+                                                            ],
+                                                            "properties": {
+                                                                "repeat_question": {
+                                                                    "type": "boolean",
+                                                                    "default": false
+                                                                },
+                                                                "messages": {
+                                                                    "$ref": "#/definitions/messages"
+                                                                }
+                                                            },
+                                                            "additionalProperties": false
+                                                        },
+                                                        "max_attempts": {
+                                                            "$ref": "#/definitions/max_attempts"
+                                                        }
+                                                    },
+                                                    "additionalProperties": false
+                                                }
+                                            ]
+                                        },
+                                        "confirm": {
+                                            "type": "object",
+                                            "required": [
+                                                "messages",
+                                                "on_confirm",
+                                                "on_reject",
+                                                "max_attempts"
+                                            ],
+                                            "properties": {
+                                                "messages": {
+                                                    "$ref": "#/definitions/messages"
+                                                },
+                                                "on_confirm": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "say"
+                                                    ],
+                                                    "properties": {
+                                                        "say": {
+                                                            "$ref": "#/definitions/say"
+                                                        }
+                                                    },
+                                                    "additionalProperties": false
+                                                },
+                                                "on_reject": {
+                                                    "type": "object",
+                                                    "required": [
+                                                        "messages"
+                                                    ],
+                                                    "properties": {
+                                                        "repeat_question": {
+                                                            "type": "boolean",
+                                                            "default": false
+                                                        },
+                                                        "messages": {
+                                                            "$ref": "#/definitions/messages"
+                                                        }
+                                                    },
+                                                    "additionalProperties": false
+                                                },
+                                                "max_attempts": {
+                                                    "$ref": "#/definitions/max_attempts"
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        },
+                                        "require": {
+                                            "type": "object",
+                                            "properties": {
+                                                "messages": {
+                                                    "$ref": "#/definitions/messages"
+                                                },
+                                                "max_attempts": {
+                                                    "$ref": "#/definitions/max_attempts"
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        },
+                                        "voice_digits": {
+                                            "type": "object",
+                                            "properties": {
+                                                "num_digits": {
+                                                    "type": "integer",
+                                                    "default": 1
+                                                },
+                                                "finish_on_key": {
+                                                    "type": "string",
+                                                    "default": "#"
+                                                },
+                                                "mapping": {
+                                                    "type": "object",
+                                                    "patternProperties": {
+                                                        "^[0-9#\\*]+$": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "additionalProperties": false
+                                                }
+                                            },
+                                            "additionalProperties": false
+                                        },
+                                        "barge": {
+                                            "type": "boolean",
+                                            "default": true
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                }
+                            },
+                            "on_complete": {
+                                "type": "object",
+                                "required": [
+                                    "redirect"
+                                ],
+                                "properties": {
+                                    "redirect": {
+                                        "$ref": "#/definitions/redirect"
+                                    }
+                                },
+                                "additionalProperties": false
+                            }
+                        },
+                        "additionalProperties": false
+                    },
+                    "play": {
+                        "$ref": "#/definitions/play"
+                    }
+                },
+                "additionalProperties": false,
+                "oneOf": [
+                    {
+                        "required": [
+                            "say"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "show"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "listen"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "redirect"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "handoff"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "remember"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "collect"
+                        ]
+                    },
+                    {
+                        "required": [
+                            "play"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "additionalProperties": false
+}
