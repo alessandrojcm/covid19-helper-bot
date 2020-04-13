@@ -30,7 +30,7 @@
                         ]
                     },
                     "on_success": {
-                        "say": ""
+                        "say": "Cool I got that, let me ~consult the hive mind~ search in the archive"
                     },
                     "max_attempts": 4
                 }
@@ -43,11 +43,72 @@
     "fieldTypes": [],
     "tasks": [
         {
-            "uniqueName": "greeting",
+            "uniqueName": "store-user",
             "actions": {
                 "actions": [
                     {
-                        "redirect": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/greeting"
+                        "collect": {
+                            "on_complete": {
+                                "redirect": {
+                                    "method": "POST",
+                                    "uri": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/store-user"
+                                }
+                            },
+                            "name": "collect-name",
+                            "questions": [
+                                {
+                                    "type": "Twilio.FIRST_NAME",
+                                    "question": "Great! I promise I won't tell anyone",
+                                    "name": "first_name"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "fields": [
+                {
+                    "uniqueName": "first_name",
+                    "fieldType": "Twilio.FIRST_NAME"
+                }
+            ],
+            "samples": [
+                {
+                    "language": "en-US",
+                    "taggedText": "{first_name} it's what I'm called"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "{first_name} is my name"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "people call me {first_name}"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "people know me as {first_name}"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "{first_name}"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "my name is {first_name}"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "i'm {first_name}"
+                }
+            ]
+        },
+        {
+            "uniqueName": "menu-description",
+            "actions": {
+                "actions": [
+                    {
+                        "say": "Here's the menu!"
                     },
                     {
                         "listen": true
@@ -58,67 +119,43 @@
             "samples": [
                 {
                     "language": "en-US",
-                    "taggedText": "sup"
+                    "taggedText": "what is there to do"
                 },
                 {
                     "language": "en-US",
-                    "taggedText": "whatsup"
+                    "taggedText": "examples"
                 },
                 {
                     "language": "en-US",
-                    "taggedText": "what do you do"
+                    "taggedText": "show me the goods"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "options"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "i need something else"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "i need another thing"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "whats up for today"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "show me the menu"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "bring me the options"
                 },
                 {
                     "language": "en-US",
                     "taggedText": "what can you do"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "hey"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "yo"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "what'us up"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "hi there."
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Hello."
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "hi!"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "hi there"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "heya"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "hello"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "good afternoon"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "good morning"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Hi"
                 }
             ]
         },
@@ -147,57 +184,161 @@
                 ]
             },
             "fields": [],
-            "samples": []
+            "samples": [
+                {
+                    "language": "en-US",
+                    "taggedText": "affirmative"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "positive"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "negative"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "hell no"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "you canoot"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "nah"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "nope"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "no"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "hell yeah"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "absolutely"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "you sure can"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "why not"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "sure"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "yup"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "yep"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "yeah"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "yes"
+                }
+            ]
         },
-       {
-            "uniqueName": "store-user",
+        {
+            "uniqueName": "greeting",
             "actions": {
                 "actions": [
                     {
-                        "collect": {
-                            "name": "collect-name",
-                            "on_complete": {
-                                "redirect": {
-                                    "method": "POST",
-                                    "uri": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/store-user"
-                                }
-                            },
-                            "questions": [
-                                {
-                                    "type": "Twilio.FIRST_NAME",
-                                    "question": "Great! I promise I won't tell anyone",
-                                    "name": "first_name"
-                                }
+                        "redirect": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/greeting"
+                    },
+                    {
+                        "listen": {
+                            "tasks": [
+                                "can-have-name",
+                                "menu-description"
                             ]
                         }
                     }
                 ]
             },
             "fields": [],
-            "samples": []
-        },
-        {
-            "uniqueName": "menu-description",
-            "actions": {
-                "actions": [
-                    {
-                        "say": "Here's the menu!"
-                    }
-                ]
-            }
-        },
-        {
-            "uniqueName": "name-not-given",
-            "actions": {
-                "actions": [
-                    {
-                        "say": "Ok no biggie! Just keep in mind that I wont be able to offer all my services until you give me your name.\n Tell me if your change your mind about this please!"
-                    },
-                    {
-                        "redirect": "task://menu-description"
-                    }
-                ]
-            }
+            "samples": [
+                {
+                    "language": "en-US",
+                    "taggedText": "Hi"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "good morning"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "good afternoon"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "hello"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "heya"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "hi there"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "hi!"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "Hello."
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "hi there."
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "what'us up"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "yo"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "hey"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "what can you do"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "what do you do"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "whatsup"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "sup"
+                }
+            ]
         },
         {
             "uniqueName": "fallback",
@@ -216,6 +357,6 @@
         }
     ],
     "modelBuild": {
-        "uniqueName": "Built on 04-09-2020 23:02:00"
+        "uniqueName": "COVID19-Bot_12-4-2020_11.10.55pm"
     }
 }
