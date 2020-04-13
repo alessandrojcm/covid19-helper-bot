@@ -1,4 +1,3 @@
-from .autopilot_request import AutopilotRequest
 from .config import Config
 from .document_base import DocumentBase
 from .logging_levels import LoggingLevels
