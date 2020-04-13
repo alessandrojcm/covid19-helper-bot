@@ -149,18 +149,8 @@
             "fields": [],
             "samples": []
         },
-        {
-            "uniqueName": "menu-description",
-            "actions": {
-                "actions": [
-                    {
-                        "say": "Here's the menu!"
-                    }
-                ]
-            }
-        },
-        {
-            "unique-name": "store-user",
+       {
+            "uniqueName": "store-user",
             "actions": {
                 "actions": [
                     {
@@ -174,18 +164,30 @@
                             },
                             "questions": [
                                 {
-                                    "type": "Twilio.YES_NO",
-                                    "question": "Great! I promise I won't tell anyone!",
+                                    "type": "Twilio.FIRST_NAME",
+                                    "question": "Great! I promise I won't tell anyone",
                                     "name": "first_name"
                                 }
                             ]
                         }
                     }
                 ]
+            },
+            "fields": [],
+            "samples": []
+        },
+        {
+            "uniqueName": "menu-description",
+            "actions": {
+                "actions": [
+                    {
+                        "say": "Here's the menu!"
+                    }
+                ]
             }
         },
         {
-            "unique-name": "name-not-given",
+            "uniqueName": "name-not-given",
             "actions": {
                 "actions": [
                     {
