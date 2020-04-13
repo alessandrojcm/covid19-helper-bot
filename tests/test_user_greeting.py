@@ -1,3 +1,5 @@
+import json
+
 from app.models import UserDocument
 
 
@@ -37,3 +39,84 @@ def test_bad_request_on_invalid_number(app):
         },
     )
     assert response.status_code == 400
+
+
+def test_can_have_name_yes(app, action_schema):
+    response = app.post(
+        "api/autopilot/can-have-name",
+        data={
+            "UserIdentifier": "+12345",
+            "Memory": json.dumps(
+                {
+                    "twilio": {
+                        "collected_data": {
+                            "ask-for-name": {
+                                "answers": {"can_have_name": {"answer": "Yes"}}
+                            }
+                        }
+                    }
+                }
+            ),
+        },
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Twilio-Signature": "",
+        },
+    )
+
+    assert response.status_code == 200
+    assert action_schema(response.json()) is None
+
+
+def test_can_have_name_no(app, action_schema):
+    response = app.post(
+        "api/autopilot/can-have-name",
+        data={
+            "UserIdentifier": "+12345",
+            "Memory": json.dumps(
+                {
+                    "twilio": {
+                        "collected_data": {
+                            "ask-for-name": {
+                                "answers": {"can_have_name": {"answer": "No"}}
+                            }
+                        }
+                    }
+                }
+            ),
+        },
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Twilio-Signature": "",
+        },
+    )
+
+    assert response.status_code == 200
+    assert action_schema(response.json()) is None
+
+
+def test_store_user(app, action_schema):
+    response = app.post(
+        "api/autopilot/store-user",
+        data={
+            "UserIdentifier": "+15555555",
+            "Memory": json.dumps(
+                {
+                    "twilio": {
+                        "collected_data": {
+                            "collect-name": {
+                                "answers": {"first_name": {"answer": "Alessandro"}}
+                            }
+                        }
+                    }
+                }
+            ),
+        },
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "X-Twilio-Signature": "",
+        },
+    )
+
+    assert response.status_code == 200
+    assert action_schema(response.json()) is None

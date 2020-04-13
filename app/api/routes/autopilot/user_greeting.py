@@ -1,6 +1,7 @@
+import json
+
 from fastapi import APIRouter, HTTPException, Form
 from loguru import logger
-from phonenumbers import NumberParseException
 
 from app.decorators import error_fallback_action
 from app.models import UserDocument
@@ -49,11 +50,12 @@ def greet_user(UserIdentifier: str = Form(...)):
 @logger.catch
 @error_fallback_action
 @user_greeting.post("/can-have-name")
-def can_have_name(memory: dict = Form(...)):
-    answer = memory["twilio"]["collected_data"]["can_have_name"]["answers"][
-        "can_have_name"
-    ]
+async def can_have_name(Memory: str = Form(...)):
+    memory = json.loads(Memory)
 
+    answer = memory["twilio"]["collected_data"]["ask-for-name"]["answers"][
+        "can_have_name"
+    ]["answer"]
     if answer == "Yes":
         return {"actions": [{"redirect": "task://store-user"}]}
     return {
@@ -70,8 +72,11 @@ def can_have_name(memory: dict = Form(...)):
 @logger.catch
 @error_fallback_action(extra_action={"redirect": "task://store-user"})
 @user_greeting.post("/store-user")
-def store_user(UserIdentifier: str = Form(...), memory: dict = Form(...)):
-    name = memory["twilio"]["collected_data"]["collect-name"]["answers"]["first_name"]
+def store_user(UserIdentifier: str = Form(...), Memory: str = Form(...)):
+    memory = json.loads(Memory)
+    name = memory["twilio"]["collected_data"]["collect-name"]["answers"]["first_name"][
+        "answer"
+    ]
 
     try:
         country = phone_to_country(UserIdentifier)
