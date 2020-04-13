@@ -1,136 +1,219 @@
 {
-    "friendlyName" : "COVID19 Bot Helper",
-    "logQueries" : true,
-    "uniqueName" : "COVID19-Bot",
-    "defaults" : {
-        "defaults" : {
-            "assistant_initiation" : "task://greeting",
-            "fallback" : "task://fallback",
-            "collect" : {
-                "validate_on_failure" : "task://collect_fallback"
+    "friendlyName": "COVID19 Bot Helper",
+    "logQueries": true,
+    "uniqueName": "COVID19-Bot",
+    "defaults": {
+        "defaults": {
+            "assistant_initiation": "task://greeting",
+            "fallback": "task://fallback",
+            "collect": {
+                "validate_on_failure": "task://fallback"
             }
         }
     },
-    "styleSheet" : {
-        "style_sheet" : {
-            "collect" : {
-                "validate" : {
-                    "on_failure" : {
-                        "repeat_question" : false,
-                        "messages" : [
+    "styleSheet": {
+        "style_sheet": {
+            "collect": {
+                "validate": {
+                    "on_failure": {
+                        "repeat_question": false,
+                        "messages": [
                             {
-                                "say" : "I didn't get that. What did you say?"
+                                "say": "I didn't get that. What did you say?"
                             },
                             {
-                                "say" : "I still didn't catch that. Please repeat."
+                                "say": "I still didn't catch that. Please repeat."
                             },
                             {
-                                "say" : "Let's try one last time. Say it again please."
+                                "say": "Let's try one last time. Say it again please."
                             }
                         ]
                     },
-                    "on_success" : { "say" : "" },
-                    "max_attempts" : 4
+                    "on_success": {
+                        "say": ""
+                    },
+                    "max_attempts": 4
                 }
             },
-            "voice" : {
-                "say_voice" : "Polly.Matthew"
+            "voice": {
+                "say_voice": "Polly.Matthew"
             }
         }
     },
-    "fieldTypes" : [],
-    "tasks" : [
+    "fieldTypes": [],
+    "tasks": [
         {
-            "uniqueName" : "fallback",
-            "actions" : {
-                "actions" : [
+            "uniqueName": "greeting",
+            "actions": {
+                "actions": [
                     {
-                        "say" : "I'm sorry didn't quite get that. Please say that again."
+                        "redirect": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/greeting"
                     },
-                    { "listen" : true }
+                    {
+                        "listen": true
+                    }
                 ]
             },
-            "fields" : [],
-            "samples" : []
-        },
-        {
-            "uniqueName" : "greeting",
-            "actions" : {
-                "actions" : [
-                    {
-                        "redirect" : "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/greeting"
-                    },
-                    { "listen" : true }
-                ]
-            },
-            "fields" : [],
-            "samples" : [
+            "fields": [],
+            "samples": [
                 {
-                    "language" : "en-US",
-                    "taggedText" : "Hi"
+                    "language": "en-US",
+                    "taggedText": "sup"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "good morning"
+                    "language": "en-US",
+                    "taggedText": "whatsup"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "good afternoon"
+                    "language": "en-US",
+                    "taggedText": "what do you do"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "hello"
+                    "language": "en-US",
+                    "taggedText": "what can you do"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "heya"
+                    "language": "en-US",
+                    "taggedText": "hey"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "hi there"
+                    "language": "en-US",
+                    "taggedText": "yo"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "hi!"
+                    "language": "en-US",
+                    "taggedText": "what'us up"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "Hello."
+                    "language": "en-US",
+                    "taggedText": "hi there."
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "hi there."
+                    "language": "en-US",
+                    "taggedText": "Hello."
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "what'us up"
+                    "language": "en-US",
+                    "taggedText": "hi!"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "yo"
+                    "language": "en-US",
+                    "taggedText": "hi there"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "hey"
+                    "language": "en-US",
+                    "taggedText": "heya"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "what can you do"
+                    "language": "en-US",
+                    "taggedText": "hello"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "what do you do"
+                    "language": "en-US",
+                    "taggedText": "good afternoon"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "whatsup"
+                    "language": "en-US",
+                    "taggedText": "good morning"
                 },
                 {
-                    "language" : "en-US",
-                    "taggedText" : "sup"
+                    "language": "en-US",
+                    "taggedText": "Hi"
                 }
             ]
+        },
+        {
+            "uniqueName": "can-have-name",
+            "actions": {
+                "actions": [
+                    {
+                        "collect": {
+                            "name": "ask-for-name",
+                            "on_complete": {
+                                "redirect": {
+                                    "method": "POST",
+                                    "uri": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/can-have-name"
+                                }
+                            },
+                            "questions": [
+                                {
+                                    "type": "Twilio.YES_NO",
+                                    "question": "Can I have your name?",
+                                    "name": "can_have_name"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "fields": [],
+            "samples": []
+        },
+        {
+            "uniqueName": "menu-description",
+            "actions": {
+                "actions": [
+                    {
+                        "say": "Here's the menu!"
+                    }
+                ]
+            }
+        },
+        {
+            "unique-name": "store-user",
+            "actions": {
+                "actions": [
+                    {
+                        "collect": {
+                            "name": "collect-name",
+                            "on_complete": {
+                                "redirect": {
+                                    "method": "POST",
+                                    "uri": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/store-user"
+                                }
+                            },
+                            "questions": [
+                                {
+                                    "type": "Twilio.YES_NO",
+                                    "question": "Great! I promise I won't tell anyone!",
+                                    "name": "first_name"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "unique-name": "name-not-given",
+            "actions": {
+                "actions": [
+                    {
+                        "say": "Ok no biggie! Just keep in mind that I wont be able to offer all my services until you give me your name.\n Tell me if your change your mind about this please!"
+                    },
+                    {
+                        "redirect": "task://menu-description"
+                    }
+                ]
+            }
+        },
+        {
+            "uniqueName": "fallback",
+            "actions": {
+                "actions": [
+                    {
+                        "say": "I'm sorry, I couldn't ~contact the hive mind~ understand you. Let's try again."
+                    },
+                    {
+                        "redirect": "task://menu-description"
+                    }
+                ]
+            },
+            "fields": [],
+            "samples": []
         }
     ],
-    "modelBuild" : { "uniqueName" : "v0.1" }
+    "modelBuild": {
+        "uniqueName": "Built on 04-09-2020 23:02:00"
+    }
 }

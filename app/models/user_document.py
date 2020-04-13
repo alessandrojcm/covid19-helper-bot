@@ -8,6 +8,7 @@ class UserDocument(DocumentBase):
     _collection_name = "users"
     phone_number: str
     name: str
+    country: str
 
     class Config:
         extra = "allow"
@@ -28,9 +29,11 @@ class UserDocument(DocumentBase):
         if len(result["data"]) == 0:
             return None
         # The result is a list with the values ordered as the index defined below
-        name, ref = result["data"][0]
+        name, country, ref = result["data"][0]
 
-        return UserDocument(ref=ref, name=name, phone_number=phone_number)
+        return UserDocument(
+            ref=ref, name=name, country=country, phone_number=phone_number
+        )
 
     @classmethod
     def delete_user_by_phone_number(cls, phone_number: str):
@@ -53,7 +56,11 @@ class UserDocument(DocumentBase):
                     "source": q.collection(cls._collection_name),
                     "terms": [{"field": ["data", "phone_number"]}],
                     "unique": True,
-                    "values": [{"field": ["data", "name"]}, {"field": ["ref"]}],
+                    "values": [
+                        {"field": ["data", "name"]},
+                        {"field": ["data", "country"]},
+                        {"field": ["ref"]},
+                    ],
                 }
             )
         )
@@ -65,6 +72,7 @@ class UserDocument(DocumentBase):
                     "values": [
                         {"field": ["data", "name"]},
                         {"field": ["data", "phone_number"]},
+                        {"field": ["data", "country"]},
                         {"field": ["ref"]},
                     ],
                 }

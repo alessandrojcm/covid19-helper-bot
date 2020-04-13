@@ -22,7 +22,7 @@ class Config(BaseSettings):
     FAUNA_SERVER_KEY: SecretStr = "your_server_key_here"
     TWILIO_ENDPOINT: AnyHttpUrl = "http://localhost:5000"
     TWILIO_AUTH_TOKEN: Optional[str]
-    SENTRY_DSN: Optional[AnyHttpUrl]
+    SENTRY_DSN: Optional[str]
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -30,12 +30,12 @@ class Config(BaseSettings):
     def __post_init_post_parse__(self):
         self.LOGGING_LEVEL = LoggingLevels.DEBUG if self.DEBUG else LoggingLevels.INFO
 
-    @validator("TWILIO_AUTH_TOKEN")
-    def check_for_twilio_token(cls, v, values):
+    @validator("TWILIO_AUTH_TOKEN", "SENTRY_DSN")
+    def check_for_twilio_token(cls, v, values, field):
         if (
             "ENVIRONMENT" in values
             and values["ENVIRONMENT"] != Environments.DEV
             and not v
         ):
-            raise RuntimeError("TWILIO_AUTH_TOKEN must be set")
+            raise RuntimeError("{f} must be set".format(f=field))
         return v

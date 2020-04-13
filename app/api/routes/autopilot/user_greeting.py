@@ -1,31 +1,31 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Form
 from loguru import logger
 from phonenumbers import NumberParseException
 
 from app.decorators import error_fallback_action
-from app.models import AutopilotRequest, UserDocument
+from app.models import UserDocument
 from app.utils import phone_to_country
 
 user_greeting = APIRouter()
 
 
 @logger.catch
-@user_greeting.post("/greeting")
 @error_fallback_action
-def greet_user(data: AutopilotRequest = Depends()):
-    request = data["data"]
+@user_greeting.post("/greeting")
+def greet_user(UserIdentifier: str = Form(...)):
     try:
-        country = phone_to_country(request.user_identifier)
-    except NumberParseException:
+        country = phone_to_country(UserIdentifier)
+    except ValueError:
         raise HTTPException(status_code=400, detail="Invalid phone number")
 
-    user = UserDocument.get_by_phone(request.user_identifier)
+    user = UserDocument.get_by_phone(UserIdentifier)
 
     # TODO: Had to remove the Pydantic models because there are some quirks rendering correct json data
     # need to find a workaround around this
     if user is not None:
         return {
             "actions": [
+                {"remember": {"name": user.name, "country": user.country}},
                 {
                     "say": "Hi there! {name}, what can I do for you today?".format(
                         name=user.name
@@ -42,5 +42,53 @@ def greet_user(data: AutopilotRequest = Depends()):
                 )
             },
             {"listen": {"tasks": ["menu-description", "store-user"]}},
+        ]
+    }
+
+
+@logger.catch
+@error_fallback_action
+@user_greeting.post("/can-have-name")
+def can_have_name(memory: dict = Form(...)):
+    answer = memory["twilio"]["collected_data"]["can_have_name"]["answers"][
+        "can_have_name"
+    ]
+
+    if answer == "Yes":
+        return {"actions": [{"redirect": "task://store-user"}]}
+    return {
+        "actions": [
+            {
+                "say": """Ok no biggie! Just keep in mind that I won't be able to offer you all my
+                        capabilities unless I have your name.\n If you change you"""
+            },
+            {"redirect": "task://menu-description"},
+        ]
+    }
+
+
+@logger.catch
+@error_fallback_action(extra_action={"redirect": "task://store-user"})
+@user_greeting.post("/store-user")
+def store_user(UserIdentifier: str = Form(...), memory: dict = Form(...)):
+    name = memory["twilio"]["collected_data"]["collect-name"]["answers"]["first_name"]
+
+    try:
+        country = phone_to_country(UserIdentifier)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Invalid phone number")
+    new_user = UserDocument(
+        name=name, phone_number=UserIdentifier, country=country
+    ).save()
+
+    return {
+        "actions": [
+            {"remember": {"name": new_user.name, "country": new_user.country}},
+            {
+                "say": "Great! {name} I got that, let's begin!".format(
+                    name=new_user.name
+                )
+            },
+            {"redirect": "task://menu-description"},
         ]
     }

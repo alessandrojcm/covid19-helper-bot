@@ -75,7 +75,7 @@ class DocumentBase(BaseModel):
         )
         logger.debug("Object saved with id {ts}".format(ts=result["ts"]))
 
-        return self.__init__(ref=result["ref"], ts=result["ts"], **result["data"])
+        return self.__class__(ref=result["ref"], ts=result["ts"], **result["data"])
 
     @logger.catch
     @abstractmethod
