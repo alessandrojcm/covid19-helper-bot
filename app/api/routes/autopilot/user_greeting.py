@@ -3,11 +3,13 @@ import json
 from fastapi import APIRouter, HTTPException, Form
 from loguru import logger
 
+from app.custom_routers import UserIdentifierRoute
 from app.decorators import error_fallback_action
 from app.models import UserDocument
 from app.utils import phone_to_country
 
 user_greeting = APIRouter()
+user_greeting.route_class = UserIdentifierRoute
 
 
 @logger.catch
@@ -62,7 +64,7 @@ async def can_have_name(Memory: str = Form(...)):
         "actions": [
             {
                 "say": """Ok no biggie! Just keep in mind that I won't be able to offer you all my
-                        capabilities unless I have your name.\n If you change you"""
+                        capabilities unless I have your name.\n If you change your mind just let me know!"""
             },
             {"redirect": "task://menu-description"},
         ]
