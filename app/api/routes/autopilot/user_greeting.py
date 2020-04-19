@@ -27,12 +27,8 @@ def greet_user(UserIdentifier: str = Form(...)):
         return {
             "actions": [
                 {"remember": {"name": user.name, "country": user.country}},
-                {
-                    "say": "Hi there! {name}, what can I do for you today?".format(
-                        name=user.name
-                    )
-                },
-                {"listen": {"tasks": ["menu-description"]}},
+                {"say": "Hi there {name}!".format(name=user.name)},
+                {"redirect": "task://menu-description"},
             ]
         }
     return {
