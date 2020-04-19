@@ -13,7 +13,7 @@ class NovelCOVIDApi(object):
 
     def get_country_data(self, iso3_code: str, last_days: int = 1) -> CountryStats:
         res = self.get_request(
-            "/historical", {"query": iso3_code, "lastdays": last_days}
+            "/historical/{code}".format(code=iso3_code), {"lastdays": last_days}
         ).json()
 
         return CountryStats(
@@ -21,7 +21,7 @@ class NovelCOVIDApi(object):
             iso3_code=iso3_code,
             deaths=list(res["timeline"]["deaths"].values()).pop(),
             cases=list(res["timeline"]["cases"].values()).pop(),
-            recoveries=list(res["timeline"]["recoveries"].values()).pop(),
+            recoveries=list(res["timeline"]["recovered"].values()).pop(),
         )
 
     def get_request(self, path: str, params: Dict[str, str]) -> Response:

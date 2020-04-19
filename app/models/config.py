@@ -21,7 +21,7 @@ class Config(BaseSettings):
     FAUNA_DB_URL: AnyHttpUrl = "http://localhost:8443"
     FAUNA_SERVER_KEY: SecretStr = "your_server_key_here"
     TWILIO_ENDPOINT: AnyHttpUrl = "http://localhost:5000"
-    NOVELCOVID_JHUCSSE_API_URL: HttpUrl = "https://corona.lmao.ninja/v2/jhucsse"
+    NOVELCOVID_JHUCSSE_API_URL: HttpUrl = "https://corona.lmao.ninja/v2"
     TWILIO_AUTH_TOKEN: Optional[str]
     SENTRY_DSN: Optional[str]
 
