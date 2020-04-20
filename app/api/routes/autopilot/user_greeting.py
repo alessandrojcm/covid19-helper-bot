@@ -4,7 +4,6 @@ from fastapi import APIRouter, HTTPException, Form
 from loguru import logger
 
 from app.custom_routers import UserIdentifierRoute
-from app.decorators import error_fallback_action
 from app.models import UserDocument
 from app.utils import phone_to_country
 
@@ -13,7 +12,6 @@ user_greeting.route_class = UserIdentifierRoute
 
 
 @logger.catch
-@error_fallback_action
 @user_greeting.post("/greeting")
 def greet_user(UserIdentifier: str = Form(...)):
     try:
@@ -29,12 +27,8 @@ def greet_user(UserIdentifier: str = Form(...)):
         return {
             "actions": [
                 {"remember": {"name": user.name, "country": user.country}},
-                {
-                    "say": "Hi there! {name}, what can I do for you today?".format(
-                        name=user.name
-                    )
-                },
-                {"listen": {"tasks": ["menu-description"]}},
+                {"say": "Hi there {name}!".format(name=user.name)},
+                {"redirect": "task://menu-description"},
             ]
         }
     return {
@@ -50,7 +44,6 @@ def greet_user(UserIdentifier: str = Form(...)):
 
 
 @logger.catch
-@error_fallback_action
 @user_greeting.post("/can-have-name")
 async def can_have_name(Memory: str = Form(...)):
     memory = json.loads(Memory)
@@ -72,7 +65,6 @@ async def can_have_name(Memory: str = Form(...)):
 
 
 @logger.catch
-@error_fallback_action(extra_action={"redirect": "task://store-user"})
 @user_greeting.post("/store-user")
 def store_user(UserIdentifier: str = Form(...), Memory: str = Form(...)):
     memory = json.loads(Memory)
