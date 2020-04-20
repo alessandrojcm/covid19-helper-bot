@@ -1,575 +1,709 @@
 {
-    "friendlyName": "COVID19 Bot Helper",
-    "logQueries": true,
-    "uniqueName": "COVID19-Bot",
-    "defaults": {
-        "defaults": {
-            "assistant_initiation": "task://greeting",
-            "fallback": "task://fallback",
-            "collect": {
-                "validate_on_failure": "task://fallback"
+    "friendlyName" : "COVID19 Bot Helper",
+    "logQueries" : true,
+    "uniqueName" : "COVID19-Bot",
+    "defaults" : {
+        "defaults" : {
+            "assistant_initiation" : "task://greeting",
+            "fallback" : "task://fallback",
+            "collect" : {
+                "validate_on_failure" : "task://fallback"
             }
         }
     },
-    "styleSheet": {
-        "style_sheet": {
-            "collect": {
-                "validate": {
-                    "on_failure": {
-                        "repeat_question": false,
-                        "messages": [
+    "styleSheet" : {
+        "style_sheet" : {
+            "collect" : {
+                "validate" : {
+                    "on_failure" : {
+                        "repeat_question" : false,
+                        "messages" : [
                             {
-                                "say": "I didn't get that. What did you say?"
+                                "say" : "I didn't get that. What did you say?"
                             },
                             {
-                                "say": "I still didn't catch that. Please repeat."
+                                "say" : "I still didn't catch that. Please repeat."
                             },
                             {
-                                "say": "Let's try one last time. Say it again please."
+                                "say" : "Let's try one last time. Say it again please."
                             }
                         ]
                     },
-                    "on_success": {
-                        "say": ""
-                    },
-                    "max_attempts": 4
+                    "on_success" : { "say" : "" },
+                    "max_attempts" : 4
                 }
             },
-            "voice": {
-                "say_voice": "Polly.Matthew"
+            "voice" : {
+                "say_voice" : "Polly.Matthew"
             }
         }
     },
-    "fieldTypes": [],
-    "tasks": [
+    "fieldTypes" : [],
+    "tasks" : [
         {
-            "uniqueName": "store-user",
-            "actions": {
-                "actions": [
+            "uniqueName" : "history-for-country",
+            "actions" : {
+                "actions" : [
                     {
-                        "collect": {
-                            "on_complete": {
-                                "redirect": {
-                                    "method": "POST",
-                                    "uri": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/store-user"
+                        "collect" : {
+                            "on_complete" : {
+                                "redirect" : {
+                                    "method" : "POST",
+                                    "uri" : "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/history-for-country"
                                 }
                             },
-                            "name": "collect-name",
-                            "questions": [
+                            "name" : "country-and-date",
+                            "questions" : [
                                 {
-                                    "type": "Twilio.FIRST_NAME",
-                                    "question": "Great! I promise I won't tell anyone",
-                                    "name": "first_name"
+                                    "type" : "Twilio.COUNTRY_ISO_ALPHA3",
+                                    "prefill" : "country_info",
+                                    "question" : "Of what country would you like info about? (Psst, two and three-letter country codes also work)",
+                                    "name" : "country_info"
+                                },
+                                {
+                                    "type" : "Twilio.DATE",
+                                    "prefill" : "historical_date",
+                                    "question" : "On which date?",
+                                    "name" : "historical_date"
                                 }
                             ]
                         }
                     }
                 ]
             },
-            "fields": [
+            "fields" : [
                 {
-                    "uniqueName": "first_name",
-                    "fieldType": "Twilio.FIRST_NAME"
+                    "uniqueName" : "historical_date",
+                    "fieldType" : "Twilio.DATE"
+                },
+                {
+                    "uniqueName" : "country_info",
+                    "fieldType" : "Twilio.COUNTRY_ISO_ALPHA3"
                 }
             ],
-            "samples": [
+            "samples" : [
                 {
-                    "language": "en-US",
-                    "taggedText": "I'm {first_name}"
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data on {country_info}"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "{first_name} it's what I'm called"
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "{first_name} is my name"
+                    "language" : "en-US",
+                    "taggedText" : "I would like information about {country_info} on {historical_date}"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "people call me {first_name}"
+                    "language" : "en-US",
+                    "taggedText" : "I would like to know about {country_info} on {historical_date}"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "people know me as {first_name}"
+                    "language" : "en-US",
+                    "taggedText" : "Information about {country_info} on {historical_date}"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "{first_name}"
+                    "language" : "en-US",
+                    "taggedText" : "How were they doing in {country_info} on {historical_date}"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "my name is {first_name}"
+                    "language" : "en-US",
+                    "taggedText" : "How {country_info} was doing on {historical_date}"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "i'm {first_name}"
+                    "language" : "en-US",
+                    "taggedText" : "What was the virus like in {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "What about {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Stats on {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "{country_info} status on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Epidemic in {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Pandemic in {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "{country_info} status on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "history"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "historic"
                 }
             ]
         },
         {
-            "uniqueName": "menu-description",
-            "actions": {
-                "actions": [
+            "uniqueName" : "stats-for-country",
+            "actions" : {
+                "actions" : [
                     {
-                        "say": "What would you like to do?"
+                        "collect" : {
+                            "on_complete" : {
+                                "redirect" : {
+                                    "method" : "POST",
+                                    "uri" : "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/stats-for-country"
+                                }
+                            },
+                            "name" : "country-iso-3",
+                            "questions" : [
+                                {
+                                    "type" : "Twilio.COUNTRY_ISO_ALPHA3",
+                                    "question" : "Of what country would you like info about? (Psst, two and three-letter country codes also work)",
+                                    "name" : "country_info",
+                                    "prefill": "country_info"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "fields" : [
+                {
+                    "uniqueName" : "country_info",
+                    "fieldType" : "Twilio.COUNTRY_ISO_ALPHA3"
+                }
+            ],
+            "samples" : [
+                {
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data on {country_info}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "I would like information about {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "I would like to know about {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Information about {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "How were they doing in {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "How {country_info} was doing on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "What was the virus like in {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "What about {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Stats on {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "{country_info} status on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Epidemic in {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Pandemic in {country_info} on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "{country_info} status on {historical_date}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "i'd like historical data"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "history"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "historic"
+                }
+            ]
+        },
+        {
+            "uniqueName" : "store-user",
+            "actions" : {
+                "actions" : [
+                    {
+                        "collect" : {
+                            "on_complete" : {
+                                "redirect" : {
+                                    "method" : "POST",
+                                    "uri" : "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/store-user"
+                                }
+                            },
+                            "name" : "collect-name",
+                            "questions" : [
+                                {
+                                    "type" : "Twilio.FIRST_NAME",
+                                    "question" : "Great! I promise I won't tell anyone",
+                                    "name" : "first_name",
+                                    "prefill": "fist_name"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "fields" : [
+                {
+                    "uniqueName" : "first_name",
+                    "fieldType" : "Twilio.FIRST_NAME"
+                }
+            ],
+            "samples" : [
+                {
+                    "language" : "en-US",
+                    "taggedText" : "I'm {first_name}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "{first_name} it's what I'm called"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "{first_name} is my name"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "people call me {first_name}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "people know me as {first_name}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "{first_name}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "my name is {first_name}"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "i'm {first_name}"
+                }
+            ]
+        },
+        {
+            "uniqueName" : "menu-description",
+            "actions" : {
+                "actions" : [
+                    {
+                        "say" : "What would you like to do?"
                     },
                     {
-                        "say": "I can give you information of how any country it's doing with the pandemic"
+                        "say" : "I can give you information of how any country it's doing with the pandemic"
                     },
                     {
-                        "listen": {
-                            "tasks": [
+                        "say" : "Also, I can give you historical data on any given country"
+                    },
+                    {
+                        "listen" : {
+                            "tasks" : [
                                 "can-have-name",
-                                "stats-for-country"
+                                "stats-for-country",
+                                "history-for-country"
                             ]
                         }
                     }
                 ]
             },
-            "fields": [
-            ],
-            "samples": [
+            "fields" : [],
+            "samples" : [
                 {
-                    "language": "en-US",
-                    "taggedText": "what is there to do"
+                    "language" : "en-US",
+                    "taggedText" : "what is there to do"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "examples"
+                    "language" : "en-US",
+                    "taggedText" : "examples"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "show me the goods"
+                    "language" : "en-US",
+                    "taggedText" : "show me the goods"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "options"
+                    "language" : "en-US",
+                    "taggedText" : "options"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "i need something else"
+                    "language" : "en-US",
+                    "taggedText" : "i need something else"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "i need another thing"
+                    "language" : "en-US",
+                    "taggedText" : "i need another thing"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "whats up for today"
+                    "language" : "en-US",
+                    "taggedText" : "whats up for today"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "show me the menu"
+                    "language" : "en-US",
+                    "taggedText" : "show me the menu"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "bring me the options"
+                    "language" : "en-US",
+                    "taggedText" : "bring me the options"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "what can you do"
+                    "language" : "en-US",
+                    "taggedText" : "what can you do"
                 }
             ]
         },
         {
-            "uniqueName": "can-have-name",
-            "actions": {
-                "actions": [
+            "uniqueName" : "can-have-name",
+            "actions" : {
+                "actions" : [
                     {
-                        "collect": {
-                            "on_complete": {
-                                "redirect": {
-                                    "method": "POST",
-                                    "uri": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/can-have-name"
+                        "collect" : {
+                            "on_complete" : {
+                                "redirect" : {
+                                    "method" : "POST",
+                                    "uri" : "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/can-have-name"
                                 }
                             },
-                            "name": "ask-for-name",
-                            "questions": [
+                            "name" : "ask-for-name",
+                            "questions" : [
                                 {
-                                    "type": "Twilio.YES_NO",
-                                    "question": "Can I have your name?",
-                                    "name": "can_have_name"
+                                    "type" : "Twilio.YES_NO",
+                                    "question" : "Can I have your name?",
+                                    "name" : "can_have_name"
                                 }
                             ]
                         }
                     }
                 ]
             },
-            "fields": [],
-            "samples": [
+            "fields" : [],
+            "samples" : [
                 {
-                    "language": "en-US",
-                    "taggedText": "nou"
+                    "language" : "en-US",
+                    "taggedText" : "yes"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "no"
+                    "language" : "en-US",
+                    "taggedText" : "yeah"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "nope"
+                    "language" : "en-US",
+                    "taggedText" : "yep"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "nope"
+                    "language" : "en-US",
+                    "taggedText" : "yup"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "nope"
+                    "language" : "en-US",
+                    "taggedText" : "sure"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "nope"
+                    "language" : "en-US",
+                    "taggedText" : "why not"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "no"
+                    "language" : "en-US",
+                    "taggedText" : "you sure can"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "no"
+                    "language" : "en-US",
+                    "taggedText" : "absolutely"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Sure"
+                    "language" : "en-US",
+                    "taggedText" : "hell yeah"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "yes"
+                    "language" : "en-US",
+                    "taggedText" : "no"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Yes"
+                    "language" : "en-US",
+                    "taggedText" : "nope"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "I'm Rafael"
+                    "language" : "en-US",
+                    "taggedText" : "nah"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "My name is Rafael"
+                    "language" : "en-US",
+                    "taggedText" : "you canoot"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "nope"
+                    "language" : "en-US",
+                    "taggedText" : "hell no"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Sure"
+                    "language" : "en-US",
+                    "taggedText" : "negative"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Yeah"
+                    "language" : "en-US",
+                    "taggedText" : "positive"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Affirmative"
+                    "language" : "en-US",
+                    "taggedText" : "affirmative"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Sure"
+                    "language" : "en-US",
+                    "taggedText" : "Of course"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Of course"
+                    "language" : "en-US",
+                    "taggedText" : "Sure"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "affirmative"
+                    "language" : "en-US",
+                    "taggedText" : "Affirmative"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "positive"
+                    "language" : "en-US",
+                    "taggedText" : "Yeah"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "negative"
+                    "language" : "en-US",
+                    "taggedText" : "Sure"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hell no"
+                    "language" : "en-US",
+                    "taggedText" : "nope"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "you canoot"
+                    "language" : "en-US",
+                    "taggedText" : "My name is Rafael"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "nah"
+                    "language" : "en-US",
+                    "taggedText" : "I'm Rafael"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "nope"
+                    "language" : "en-US",
+                    "taggedText" : "Yes"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "no"
+                    "language" : "en-US",
+                    "taggedText" : "yes"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hell yeah"
+                    "language" : "en-US",
+                    "taggedText" : "Sure"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "absolutely"
+                    "language" : "en-US",
+                    "taggedText" : "no"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "you sure can"
+                    "language" : "en-US",
+                    "taggedText" : "no"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "why not"
+                    "language" : "en-US",
+                    "taggedText" : "nope"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "sure"
+                    "language" : "en-US",
+                    "taggedText" : "nope"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "yup"
+                    "language" : "en-US",
+                    "taggedText" : "nope"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "yep"
+                    "language" : "en-US",
+                    "taggedText" : "nope"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "yeah"
+                    "language" : "en-US",
+                    "taggedText" : "no"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "yes"
+                    "language" : "en-US",
+                    "taggedText" : "nou"
                 }
             ]
         },
         {
-            "uniqueName": "stats-for-country",
-            "actions": {
-                "actions": [
-                    {
-                        "collect": {
-                            "on_complete": {
-                                "redirect": {
-                                    "method": "POST",
-                                    "uri": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/stats-for-country"
-                                }
-                            },
-                            "name": "country-iso-3",
-                            "questions": [
-                                {
-                                    "type": "Twilio.COUNTRY_ISO_ALPHA3",
-                                    "question": "Of what country would you like info about? (Psst, I can recognize ISO alpha 2 and alpha 3 codes as well)",
-                                    "name": "country_info"
-                                }
-                            ]
-                        }
-                    }
-                ]
-            },
-            "fields": [
-                {
-                    "uniqueName": "country_info",
-                    "fieldType": "Twilio.COUNTRY_ISO_ALPHA3"
-                }
-            ],
-            "samples": [
-                {
-                    "language": "en-US",
-                    "taggedText": "I would like information about {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "I would like to know about {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Information about {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "How are they doing in {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "How are they doing in {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "How {country_info} is doing"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "What's the virus like in {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "What about {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Stats on {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "{country_info} status"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Epidemic in {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Pandemic in {country_info}"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "{country_info} status"
-                }
-            ]
-        },
-        {
-            "uniqueName": "greeting",
-            "actions": {
-                "actions": [
+            "uniqueName" : "greeting",
+            "actions" : {
+                "actions" : [
                     {
                         "redirect": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/greeting"
                     },
                     {
-                        "listen": {
-                            "tasks": [
-                                "can-have-name"
-                            ]
+                        "listen" : {
+                            "tasks" : ["can-have-name"]
                         }
                     }
                 ]
             },
-            "fields": [],
-            "samples": [
+            "fields" : [],
+            "samples" : [
                 {
-                    "language": "en-US",
-                    "taggedText": "greetings"
+                    "language" : "en-US",
+                    "taggedText" : "greetings"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hello there"
+                    "language" : "en-US",
+                    "taggedText" : "hello there"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "what's up"
+                    "language" : "en-US",
+                    "taggedText" : "what's up"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hey"
+                    "language" : "en-US",
+                    "taggedText" : "hey"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hello"
+                    "language" : "en-US",
+                    "taggedText" : "hello"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hey"
+                    "language" : "en-US",
+                    "taggedText" : "hey"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hi"
+                    "language" : "en-US",
+                    "taggedText" : "hi"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hey"
+                    "language" : "en-US",
+                    "taggedText" : "hey"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Hey"
+                    "language" : "en-US",
+                    "taggedText" : "Hey"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Hey"
+                    "language" : "en-US",
+                    "taggedText" : "Hey"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Hi"
+                    "language" : "en-US",
+                    "taggedText" : "Hi"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "good morning"
+                    "language" : "en-US",
+                    "taggedText" : "good morning"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "good afternoon"
+                    "language" : "en-US",
+                    "taggedText" : "good afternoon"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hello"
+                    "language" : "en-US",
+                    "taggedText" : "hello"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "heya"
+                    "language" : "en-US",
+                    "taggedText" : "heya"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hi there"
+                    "language" : "en-US",
+                    "taggedText" : "hi there"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hi!"
+                    "language" : "en-US",
+                    "taggedText" : "hi!"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "Hello."
+                    "language" : "en-US",
+                    "taggedText" : "Hello."
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hi there."
+                    "language" : "en-US",
+                    "taggedText" : "hi there."
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "what'us up"
+                    "language" : "en-US",
+                    "taggedText" : "what'us up"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "yo"
+                    "language" : "en-US",
+                    "taggedText" : "yo"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "hey"
+                    "language" : "en-US",
+                    "taggedText" : "hey"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "what can you do"
+                    "language" : "en-US",
+                    "taggedText" : "what can you do"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "what do you do"
+                    "language" : "en-US",
+                    "taggedText" : "what do you do"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "whatsup"
+                    "language" : "en-US",
+                    "taggedText" : "whatsup"
                 },
                 {
-                    "language": "en-US",
-                    "taggedText": "sup"
+                    "language" : "en-US",
+                    "taggedText" : "sup"
                 }
             ]
         },
         {
-            "uniqueName": "fallback",
-            "actions": {
-                "actions": [
+            "uniqueName" : "fallback",
+            "actions" : {
+                "actions" : [
                     {
-                        "say": "I'm sorry, I couldn't ~contact the hive mind~ understand you. Let's try again."
+                        "say" : "I'm sorry, I couldn't ~contact the hive mind~ understand you. Let's try again."
                     },
                     {
-                        "redirect": "task://menu-description"
+                        "redirect" : "task://menu-description"
                     }
                 ]
             },
-            "fields": [],
-            "samples": []
+            "fields" : [],
+            "samples" : []
         }
-    ],
-    "modelBuild": {
-        "uniqueName": "COVID19-Bot_17-4-2020_12.37.15am"
-    }
+    ]
 }
