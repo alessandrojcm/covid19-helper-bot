@@ -1,4 +1,7 @@
-from typing import Any
+from typing import Any, Optional
+
+from faunadb.errors import BadRequest
+from loguru import logger
 
 from app.core.engine import session
 from app.models.document_base import DocumentBase, q
@@ -9,6 +12,7 @@ class UserDocument(DocumentBase):
     phone_number: str
     name: str
     country: str
+    endless_medical_token: Optional[str]
 
     class Config:
         extra = "allow"
@@ -29,10 +33,14 @@ class UserDocument(DocumentBase):
         if len(result["data"]) == 0:
             return None
         # The result is a list with the values ordered as the index defined below
-        name, country, ref = result["data"][0]
+        name, country, endless_medical_token, ref = result["data"][0]
 
         return UserDocument(
-            ref=ref, name=name, country=country, phone_number=phone_number
+            ref=ref,
+            name=name,
+            country=country,
+            phone_number=phone_number,
+            endless_medical_token=endless_medical_token,
         )
 
     @classmethod
@@ -49,32 +57,38 @@ class UserDocument(DocumentBase):
     @classmethod
     def _DocumentBase__initialize_indexes(cls):
         # We initialize an index in order to get users by their phone number
-        session().query(
-            q.create_index(
-                {
-                    "name": "user_by_phone_number",
-                    "source": q.collection(cls._collection_name),
-                    "terms": [{"field": ["data", "phone_number"]}],
-                    "unique": True,
-                    "values": [
-                        {"field": ["data", "name"]},
-                        {"field": ["data", "country"]},
-                        {"field": ["ref"]},
-                    ],
-                }
+        try:
+            logger.info("Creating indexes for collection {c}".format(c=cls.__name__))
+            session().query(
+                q.create_index(
+                    {
+                        "name": "user_by_phone_number",
+                        "source": q.collection(cls._collection_name),
+                        "terms": [{"field": ["data", "phone_number"]}],
+                        "unique": True,
+                        "values": [
+                            {"field": ["data", "name"]},
+                            {"field": ["data", "country"]},
+                            {"field": ["data", "endless_medical_token"]},
+                            {"field": ["ref"]},
+                        ],
+                    }
+                )
             )
-        )
-        session().query(
-            q.create_index(
-                {
-                    "name": "all_users",
-                    "source": q.collection(cls._collection_name),
-                    "values": [
-                        {"field": ["data", "name"]},
-                        {"field": ["data", "phone_number"]},
-                        {"field": ["data", "country"]},
-                        {"field": ["ref"]},
-                    ],
-                }
+            session().query(
+                q.create_index(
+                    {
+                        "name": "all_users",
+                        "source": q.collection(cls._collection_name),
+                        "values": [
+                            {"field": ["data", "name"]},
+                            {"field": ["data", "phone_number"]},
+                            {"field": ["data", "country"]},
+                            {"field": ["data", "endless_medical_token"]},
+                            {"field": ["ref"]},
+                        ],
+                    }
+                )
             )
-        )
+        except BadRequest:
+            logger.info("One or more indexes already exist, skipping creation")

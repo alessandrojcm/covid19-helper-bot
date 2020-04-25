@@ -73,7 +73,7 @@ class DocumentBase(BaseModel):
         result = session().query(
             q.create(q.collection(self._collection_name), {"data": attributes},)
         )
-        logger.debug("Object saved with id {ts}".format(ts=result["ts"]))
+        logger.debug("Object saved with id {ref}".format(ref=result["ref"]))
 
         return self.__class__(ref=result["ref"], ts=result["ts"], **result["data"])
 
@@ -82,3 +82,10 @@ class DocumentBase(BaseModel):
     def delete(self):
         """Subclasses must override this method since they use their own indexes for deleting"""
         pass
+
+    @logger.catch
+    def update(self):
+        updated_vals = self.dict(exclude={"ref", "ts"})
+        updated_vals["updated_at"] = datetime.now(pytz.timezone("UTC"))
+
+        session().query(q.update(self.ref, {"data": {**updated_vals}}))
