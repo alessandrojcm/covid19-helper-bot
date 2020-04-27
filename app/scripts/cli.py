@@ -4,7 +4,6 @@ import click
 from click import Context
 
 from app.core import config
-from app.models import Config
 
 
 @click.group()
