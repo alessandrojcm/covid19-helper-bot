@@ -153,7 +153,9 @@ def analyze_answers(UserIdentifier: str = Form(...)):
 
         return {
             "actions": [
-                {"say": "Great news! You don not have anything to worry about ;)"},
+                {
+                    "say": "Great news! You don not have anything to worry about 🥳\U0001f973"
+                },
                 {"redirect": "task://menu-description"},
             ]
         }

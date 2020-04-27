@@ -1,7 +1,6 @@
 from typing import Any
 
 from fastapi import Header, Request, HTTPException, Form
-from starlette.formparsers import FormData
 from twilio.request_validator import RequestValidator
 
 from app.core import config

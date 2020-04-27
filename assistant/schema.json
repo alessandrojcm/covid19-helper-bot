@@ -594,7 +594,7 @@
             "actions": {
                 "actions": [
                     {
-                        "say": "What would you like to do?\nI can give you information of how any country it's doing with the pandemic\u1f30f\nAlso, I can give you historical data on any given country\u1f30\u1f55c\nI can run you trough a self checker to help you decide if you need to seek proper medical attention\u1f927"
+                        "say": "What would you like to do?\n\nI can give you information of how any country it's doing with the pandemic\uD83C\uDF0F\n\nAlso, I can give you historical data on any given country\uD83C\uDF0F\uD83D\uDD5C\n\nI can run you trough a self checker to help you decide if you need to seek proper medical attention\uD83E\uDD27"
                     },
                     {
                         "listen": {
@@ -952,7 +952,7 @@
             "actions": {
                 "actions": [
                     {
-                        "say": "I'm sorry, I couldn't ~contact the hive mind~ understand you \u1f92f. Let's try again."
+                        "say": "I'm sorry, I couldn't ~contact the hive mind~ understand you \uD83E\uDD2F. Let's try again."
                     },
                     {
                         "redirect": "task://menu-description"
