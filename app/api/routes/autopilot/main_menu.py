@@ -1,13 +1,12 @@
 import json
 from datetime import date
 
-from fastapi import APIRouter, HTTPException, Form
+from fastapi import APIRouter, Form
 from loguru import logger
 
-from app.custom_routers import UserIdentifierRoute
-from app.models import CountryStats
-from app.services import NovelCOVIDApi
 from app.core import config
+from app.custom_routers import UserIdentifierRoute
+from app.services import NovelCOVIDApi
 
 main_menu = APIRouter()
 main_menu.route_class = UserIdentifierRoute
@@ -25,7 +24,7 @@ async def stats_for_country(Memory: str = Form(...)):
     ]
 
     stats = str(novelcovid_api.get_country_data(iso3_code=iso3_code))
-    return {"actions": [{"say": stats}, {"redirect": "task://menu-description"},]}
+    return {"actions": [{"say": stats}, {"redirect": "task://menu-description"}]}
 
 
 @logger.catch
