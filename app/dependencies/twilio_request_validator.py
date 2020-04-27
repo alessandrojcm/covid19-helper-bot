@@ -1,4 +1,7 @@
-from fastapi import Header, Request, HTTPException
+from typing import Any
+
+from fastapi import Header, Request, HTTPException, Form
+from starlette.formparsers import FormData
 from twilio.request_validator import RequestValidator
 
 from app.core import config
@@ -12,9 +15,9 @@ async def twilio_request_validator(
         return request
     validator = RequestValidator(config.TWILIO_AUTH_TOKEN)
 
-    is_valid = validator.validate(
-        str(request.url), await request.form(), x_twilio_signature
-    )
+    # So I don't now why this double await is needed, but otherwise it does not work
+    params = await request.form()
+    is_valid = validator.validate(str(request.url), await params, x_twilio_signature)
 
     if not is_valid:
         raise HTTPException(status_code=403)
