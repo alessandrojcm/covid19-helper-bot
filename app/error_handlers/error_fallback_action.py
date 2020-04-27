@@ -1,14 +1,14 @@
-from fastapi import Response
+import traceback
 from fastapi.responses import JSONResponse
 
 from app.services import capture_message
 
 
-def error_fallback_action(request, exc):
+def error_fallback_action(_, exc: Exception):
     """
         This function catches 500 code exceptions and returns a fallback action for the bot to say.
     """
-    capture_message(exc)
+    capture_message(traceback.print_exception(None, exc, exc.__traceback__))
     return JSONResponse(
         content={
             "actions": {
