@@ -1,21 +1,16 @@
-from typing import Dict
 from datetime import date, timedelta
 
-from requests import Response, get
-
-from app.models import Config, CountryStats
+from app.models import Config, CountryStats, APIService
 
 
-class NovelCOVIDApi(object):
-    base_url: str
-
+class NovelCOVIDApi(APIService):
     def __init__(self, config: Config):
-        self.base_url = config.NOVELCOVID_JHUCSSE_API_URL
+        super().__init__(config.NOVELCOVID_JHUCSSE_API_URL)
 
     def get_country_data(
         self, iso3_code: str, last_days: int = 1, append_date=False
     ) -> CountryStats:
-        res = self.get_request(
+        res = self.get(
             "/historical/{code}".format(code=iso3_code), {"lastdays": last_days}
         ).json()
 
@@ -34,11 +29,4 @@ class NovelCOVIDApi(object):
             deaths=list(res["timeline"]["deaths"].values())[0],
             cases=list(res["timeline"]["cases"].values())[0],
             recoveries=list(res["timeline"]["recovered"].values())[0],
-        )
-
-    def get_request(self, path: str, params: Dict[str, str]) -> Response:
-        return get(
-            self.base_url + path,
-            params=params,
-            headers={"Content-Type": "application/json"},
         )
