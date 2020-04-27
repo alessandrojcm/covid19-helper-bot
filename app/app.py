@@ -1,6 +1,7 @@
 from typing import Union
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from sentry_sdk.integrations.asgi import SentryAsgiMiddleware
 
@@ -17,6 +18,7 @@ def get_application(config) -> Union[FastAPI, SentryAsgiMiddleware]:
     )
     application.exception_handler(StarletteHTTPException)(error_fallback_action)
     application.include_router(router, prefix=config.API_PREFIX)
+    application.get("/")(lambda: RedirectResponse(config.API_PREFIX))
 
     if config.ENVIRONMENT == Environments.DEV:
         return application
