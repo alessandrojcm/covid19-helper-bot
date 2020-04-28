@@ -10,13 +10,14 @@ from fastapi import APIRouter, Form
 from app.core import config
 from app.custom_routers import AutopilotRoute
 from app.models import UserDocument
-from app.services import capture_message
+from app.services import capture_message, NovelCOVIDApi
 from app.services.endless_medical_api import EndlessMedicalAPI
 from app.utils import features_mapping, reponse_mappings, outcomes_mapping
 
 self_screening = APIRouter()
 self_screening.route_class = AutopilotRoute
 endless_medical_api = EndlessMedicalAPI(config)
+novelcovid_api = NovelCOVIDApi(config)
 
 
 @self_screening.post("/self-screening/start")
@@ -27,31 +28,52 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
     start_screening = twilio["collected_data"]["accepts-test"]["answers"][
         "start-screening"
     ]["answer"]
+    user = UserDocument.get_by_phone(UserIdentifier)
 
-    if start_screening == "Yes" and not UserDocument.get_by_phone(UserIdentifier):
-        return {
-            "actions": {
+    try:
+        if start_screening == "Yes" and not user:
+            return {
+                "actions": {
+                    "actions": [
+                        {
+                            "say": "Sorry, I cannot continue until you give me your name \U00012639"
+                        },
+                        {"redirect": "task://can-have-name"},
+                    ]
+                }
+            }
+        elif start_screening == "Yes" and novelcovid_api.lives_in_risky_zone(
+            user.country
+        ):
+            accept_tos_and_store_session_id(UserIdentifier)
+
+            return {
                 "actions": [
                     {
-                        "say": "Sorry, I cannot continue until you give me your name \U00012639"
+                        "say": "Your country already has cases of COVID-19, so we will skip that question; let's go with the rest"
                     },
-                    {"redirect": "task://can-have-name"},
+                    {"redirect": "task://self-screening-q-rest"},
                 ]
             }
-        }
-    elif start_screening == "Yes":
+        elif start_screening == "Yes":
+            return {
+                "actions": [
+                    {"say": "Alright, let's start"},
+                    {"redirect": "task://self-screening-lives-in-area"},
+                ]
+            }
         return {
             "actions": [
-                {"say": "Alright, let's start"},
-                {"redirect": "task://self-screening-lives-in-area"},
+                {"say": "Cool! No problem, let's get back to the menu"},
+                {"redirect": "task://menu-description"},
             ]
         }
-    return {
-        "actions": [
-            {"say": "Cool! No problem, let's get back to the menu"},
-            {"redirect": "task://menu-description"},
-        ]
-    }
+    except faunadb.errors.BadRequest as err:
+        capture_message(err)
+        return {"actions": [{"redirect": "task://fallback"}]}
+    except BaseHTTPError as err:
+        capture_message(err)
+        return {"actions": [{"redirect": "task://fallback"}]}
 
 
 @self_screening.post("/self-screening/lives-in-area")
@@ -74,24 +96,7 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
             ]
         }
     try:
-        endless_medical_session_id = endless_medical_api.get_session_token()
-        if not endless_medical_api.accept_tos(endless_medical_session_id):
-            raise BaseHTTPError("Error accepting Endless Medical TOS")
-        user = UserDocument.get_by_phone(UserIdentifier)
-        user.endless_medical_token = endless_medical_session_id
-        logger.debug(
-            "Adding {feature} with value {value}".format(
-                feature=features_mapping.get("lives-in-area"), value=5
-            )
-        )
-        # 5 is the endless medical api value for "lives in a covid 19 affected area" we assume so because
-        # to get into this step the user must have answered yes to this question in a previous step
-        # the options was not added to the mapping since overlaps with the "severe" answer mapping
-        endless_medical_api.add_feature(
-            endless_medical_session_id, features_mapping.get("lives-in-area"), 5
-        )
-
-        user.update()
+        accept_tos_and_store_session_id(UserIdentifier)
 
         return {"actions": [{"redirect": "task://self-screening-q-rest"}]}
     except faunadb.errors.BadRequest as err:
@@ -232,3 +237,23 @@ def check_outcomes(outcomes: List[Dict[str, str]], name: str = None) -> bool:
         elif not name and confidence >= config.OUTCOME_THRESHOLD:
             return True
     return False
+
+
+def accept_tos_and_store_session_id(phone_number: str):
+    endless_medical_session_id = endless_medical_api.get_session_token()
+    if not endless_medical_api.accept_tos(endless_medical_session_id):
+        raise BaseHTTPError("Error accepting Endless Medical TOS")
+    user = UserDocument.get_by_phone(phone_number)
+    user.endless_medical_token = endless_medical_session_id
+    logger.debug(
+        "Adding {feature} with value {value}".format(
+            feature=features_mapping.get("lives-in-area"), value=5
+        )
+    )
+    # 5 is the endless medical api value for "lives in a covid 19 affected area" we assume so because
+    # to get into this step the user must have answered yes to this question in a previous step
+    # the options was not added to the mapping since overlaps with the "severe" answer mapping
+    endless_medical_api.add_feature(
+        endless_medical_session_id, features_mapping.get("lives-in-area"), 5
+    )
+    user.update()

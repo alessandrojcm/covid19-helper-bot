@@ -30,3 +30,6 @@ class NovelCOVIDApi(APIService):
             cases=list(res["timeline"]["cases"].values())[0],
             recoveries=list(res["timeline"]["recovered"].values())[0],
         )
+
+    def lives_in_risky_zone(self, country: str) -> bool:
+        return self.get_country_data(country).cases > 0
