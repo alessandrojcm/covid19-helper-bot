@@ -1,6 +1,5 @@
 import json
 from os import environ
-from functools import partial
 
 import pytest
 from starlette.testclient import TestClient

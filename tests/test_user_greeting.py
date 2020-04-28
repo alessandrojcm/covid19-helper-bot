@@ -30,20 +30,6 @@ def test_greet_user_not_found(app, action_schema):
     assert response.status_code == 200
 
 
-# fixme: this test it's broken due to the custom router for dev mode
-def test_bad_request_on_invalid_number(app):
-    environ["ENVIRONMENT"] = "stating"
-    response = app.post(
-        "/api/autopilot/greeting",
-        data={"UserIdentifier": "+12345"},
-        headers={
-            "Content-Type": "application/x-www-form-urlencoded",
-            "X-Twilio-Signature": "",
-        },
-    )
-    assert response.status_code == 400
-
-
 def test_can_have_name_yes(app, action_schema):
     response = app.post(
         "api/autopilot/can-have-name",

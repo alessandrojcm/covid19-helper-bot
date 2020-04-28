@@ -64,4 +64,4 @@ async def history_for_country(Memory: str = Form(...)):
         )
     )
 
-    return {"actions": [{"say": stats}, {"redirect": "task://menu-description"},]}
+    return {"actions": [{"say": stats}, {"redirect": "task://menu-description"}]}

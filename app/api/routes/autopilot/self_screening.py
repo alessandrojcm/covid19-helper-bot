@@ -50,7 +50,8 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
             return {
                 "actions": [
                     {
-                        "say": "Your country already has cases of COVID-19, so we will skip that question; let's go with the rest"
+                        "say": "Your country already has cases of COVID-19, so we will skip that question; let's go "
+                        "with the rest "
                     },
                     {"redirect": "task://self-screening-q-rest"},
                 ]
@@ -159,7 +160,8 @@ def analyze_answers(UserIdentifier: str = Form(...)):
                     chain(
                         [
                             {
-                                "say": "You probably do not have COVID-19, but, according to your symptoms, you should seek medical attention anyways"
+                                "say": "You probably do not have COVID-19, but, according to your symptoms, "
+                                "you should seek medical attention anyways "
                             }
                         ],
                         fix_response,

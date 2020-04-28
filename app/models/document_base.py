@@ -34,8 +34,6 @@ class DocumentBase(BaseModel):
     @classmethod
     @logger.catch
     def __initialize_collection(cls):
-        from app.core.engine import session
-
         logger.info(
             "Checking if collection {c} exists...".format(c=cls._collection_name)
         )

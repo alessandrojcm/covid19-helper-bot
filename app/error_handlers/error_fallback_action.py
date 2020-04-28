@@ -14,7 +14,8 @@ def error_fallback_action(_, exc: Exception):
             "actions": {
                 "actions": [
                     {
-                        "say": "Oops, looks like ~the hive mind can't come to an agreement~ I can fulfill your task; let's try again"
+                        "say": "Oops, looks like ~the hive mind can't come to an agreement~ I can fulfill your task; "
+                        "let's try again "
                     },
                     {"redirect": "task://menu-description"},
                 ]

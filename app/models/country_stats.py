@@ -17,17 +17,23 @@ class CountryStats(BaseModel):
 
     def __generate_str_repr(self):
         if not self.stats_date:
-            return "{country} has {cases} cases, {deaths} deaths and {recoveries} recoveries.\nSource: John Hopkins University.".format(
+            return (
+                "{country} has {cases} cases, {deaths} deaths and {recoveries} recoveries.\nSource: John Hopkins "
+                "University.".format(
+                    country=self.country_name,
+                    deaths=self.deaths,
+                    cases=self.cases,
+                    recoveries=self.recoveries,
+                )
+            )
+
+        return (
+            "On {date}, {country} had {cases} cases, {deaths} deaths and {recoveries} recoveries.\nSource: John "
+            "Hopkins University.".format(
                 country=self.country_name,
                 deaths=self.deaths,
                 cases=self.cases,
                 recoveries=self.recoveries,
+                date=self.stats_date.strftime("%A %d of %B"),
             )
-
-        return "On {date}, {country} had {cases} cases, {deaths} deaths and {recoveries} recoveries.\nSource: John Hopkins University.".format(
-            country=self.country_name,
-            deaths=self.deaths,
-            cases=self.cases,
-            recoveries=self.recoveries,
-            date=self.stats_date.strftime("%A %d of %B"),
         )
