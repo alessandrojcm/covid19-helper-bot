@@ -8,8 +8,8 @@ from app.models import APIService, Config
 class EndlessMedicalAPI(APIService):
     base_url: str
     # Exact passphrase to send needed to accept tos as per the docs
-    tos_passphrase: str = """I have read, understood and I accept and agree to comply with the Terms of Use of
-    EndlessMedicalAPI and Endless Medical services. The Terms of Use are available on endlessmedical.com """
+    # pragma: noqa
+    tos_passphrase: str = "I have read, understood and I accept and agree to comply with the Terms of Use of EndlessMedicalAPI and Endless Medical services. The Terms of Use are available on endlessmedical.com"
 
     def __init__(self, config: Config):
         super().__init__(config.ENDLESS_MEDICAL_API_URL)
