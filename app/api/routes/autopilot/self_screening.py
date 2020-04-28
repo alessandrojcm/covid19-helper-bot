@@ -20,7 +20,7 @@ endless_medical_api = EndlessMedicalAPI(config)
 
 
 @self_screening.post("/self-screening/start")
-def self_screening_start(Memory: str = Form(...)):
+def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...)):
     memory = json.loads(Memory)
     twilio = memory.pop("twilio")
 
@@ -28,7 +28,18 @@ def self_screening_start(Memory: str = Form(...)):
         "start-screening"
     ]["answer"]
 
-    if start_screening == "Yes":
+    if start_screening == "Yes" and not UserDocument.get_by_phone(UserIdentifier):
+        return {
+            "actions": {
+                "actions": [
+                    {
+                        "say": "Sorry, I cannot continue until you give me your name \U00012639"
+                    },
+                    {"redirect": "task://can-have-name"},
+                ]
+            }
+        }
+    elif start_screening == "Yes":
         return {
             "actions": [
                 {"say": "Alright, let's start"},
