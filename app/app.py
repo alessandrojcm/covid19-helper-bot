@@ -27,5 +27,6 @@ def get_application(config) -> Union[FastAPI, SentryAsgiMiddleware]:
 
 
 def init_middlewares(application):
-    [application.add_middleware(middleware) for middleware in MIDDLEWARES]
+    for middleware in MIDDLEWARES:
+        application.add_middleware(middleware)
     init_sentry()

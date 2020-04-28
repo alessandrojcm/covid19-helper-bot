@@ -7,4 +7,5 @@ def create_collections() -> None:
     It really does not do much, but it does not feel right to have it embedded in the cli.py
     :return: None
     """
-    [Doc.create_collection() for Doc in DOCUMENTS]
+    for Doc in DOCUMENTS:
+        Doc.create_collection()

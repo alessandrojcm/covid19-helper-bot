@@ -15,9 +15,9 @@ def replace_variables():
     """
     logger.info("Reading schema file...")
     path = get_entry_point()
-    schema_file = open(path.joinpath("assistant/schema.json"))
-    schema = schema_file.read().replace("\n", "")
-    schema_file.close()
+    schema = None
+    with open(path.joinpath("assistant/schema.json")) as schema_file:
+        schema = schema_file.read().replace("\n", "")
 
     logger.info("Replacing keys...")
     for key, val in config:

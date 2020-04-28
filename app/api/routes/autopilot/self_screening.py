@@ -42,7 +42,7 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
                     ]
                 }
             }
-        elif start_screening == "Yes" and novelcovid_api.lives_in_risky_zone(
+        if start_screening == "Yes" and novelcovid_api.lives_in_risky_zone(
             user.country
         ):
             accept_tos_and_store_session_id(UserIdentifier)
@@ -56,7 +56,7 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
                     {"redirect": "task://self-screening-q-rest"},
                 ]
             }
-        elif start_screening == "Yes":
+        if start_screening == "Yes":
             return {
                 "actions": [
                     {"say": "Alright, let's start"},
@@ -78,7 +78,9 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
 
 
 @self_screening.post("/self-screening/lives-in-area")
-def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...)):
+def self_screening_lives_in_area(
+    UserIdentifier: str = Form(...), Memory: str = Form(...)
+):
     memory = json.loads(Memory)
     twilio = memory.pop("twilio")
 

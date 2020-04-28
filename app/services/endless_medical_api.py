@@ -1,3 +1,5 @@
+from symbol import test
+
 from requests import Response
 
 from app.models import APIService, Config
@@ -20,8 +22,7 @@ class EndlessMedicalAPI(APIService):
             "/UpdateFeature",
             {"SessionID": session_id, "name": feature_name, "value": feature_value},
         )
-
-        return True if res.status_code == 200 else False
+        return bool(res.status_code == 200)
 
     def get_session_token(self) -> str:
         """
@@ -39,5 +40,4 @@ class EndlessMedicalAPI(APIService):
             "/AcceptTermsOfUse",
             params={"SessionID": api_session_id, "passphrase": self.tos_passphrase},
         )
-
-        return True if res.status_code == 200 else False
+        return bool(res.status_code == 200)

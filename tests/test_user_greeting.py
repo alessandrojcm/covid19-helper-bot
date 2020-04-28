@@ -1,5 +1,4 @@
 import json
-from os import environ
 
 from app.models import UserDocument
 
