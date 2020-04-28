@@ -5,11 +5,11 @@ from fastapi import APIRouter, Form
 from loguru import logger
 
 from app.core import config
-from app.custom_routers import UserIdentifierRoute
+from app.custom_routers import AutopilotRoute
 from app.services import NovelCOVIDApi
 
 main_menu = APIRouter()
-main_menu.route_class = UserIdentifierRoute
+main_menu.route_class = AutopilotRoute
 novelcovid_api = NovelCOVIDApi(config)
 
 

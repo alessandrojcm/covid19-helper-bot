@@ -8,14 +8,14 @@ from requests.exceptions import BaseHTTPError
 from fastapi import APIRouter, Form
 
 from app.core import config
-from app.custom_routers import UserIdentifierRoute
+from app.custom_routers import AutopilotRoute
 from app.models import UserDocument
 from app.services import capture_message
 from app.services.endless_medical_api import EndlessMedicalAPI
 from app.utils import features_mapping, reponse_mappings, outcomes_mapping
 
 self_screening = APIRouter()
-self_screening.route_class = UserIdentifierRoute
+self_screening.route_class = AutopilotRoute
 endless_medical_api = EndlessMedicalAPI(config)
 
 

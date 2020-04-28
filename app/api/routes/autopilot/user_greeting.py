@@ -3,12 +3,12 @@ import json
 from fastapi import APIRouter, HTTPException, Form
 from loguru import logger
 
-from app.custom_routers import UserIdentifierRoute
+from app.custom_routers import AutopilotRoute
 from app.models import UserDocument
 from app.utils import phone_to_country
 
 user_greeting = APIRouter()
-user_greeting.route_class = UserIdentifierRoute
+user_greeting.route_class = AutopilotRoute
 
 
 @logger.catch
