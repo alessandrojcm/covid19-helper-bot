@@ -8,6 +8,11 @@ from app.models.document_base import DocumentBase, q
 
 
 class UserDocument(DocumentBase):
+    """
+    Document that represents a user, ignore the type error; it's from the
+    _DocumentBase__initialize_indexes method.
+    """
+
     _collection_name = "users"
     phone_number: str
     name: str

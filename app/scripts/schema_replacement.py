@@ -10,8 +10,9 @@ from app.utils import get_entry_point
 @logger.catch
 def replace_variables():
     """
-        This utility function loads the schema json and replaces its variable keys with
-        the values loaded from either the .env file or from environment variables
+    This utility function loads the schema json and replaces its variable keys with
+    the values loaded from either the .env file or from environment variables; this in case
+    we change something about our API url
     """
     logger.info("Reading schema file...")
     path = get_entry_point()

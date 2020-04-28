@@ -4,6 +4,9 @@ _session = None
 
 
 def session():
+    """
+    Helper function to get faunadb session, if there is one already it just returns
+    """
     from .config import config
     from app.models.environments import Environments
 

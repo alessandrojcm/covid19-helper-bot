@@ -24,6 +24,7 @@ class Config(BaseSettings):
     NOVELCOVID_JHUCSSE_API_URL: HttpUrl = "https://corona.lmao.ninja/v2"
     ENDLESS_MEDICAL_API_URL: HttpUrl = "https://api.endlessmedical.com/v1/dx"
     OUTCOME_THRESHOLD: float = 0.45  # Confidence level for recommending seeking medical help
+    FAKE_NUMBER: str = "+15555555"
     TWILIO_AUTH_TOKEN: Optional[str]
     SENTRY_DSN: Optional[str]
 

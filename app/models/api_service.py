@@ -5,6 +5,10 @@ from requests import Response, get, post
 
 
 class APIService(ABC):
+    """
+    Base class that abstract away HTTP calls and has some overloads and common parameters
+    """
+
     base_url: str
 
     def __init__(self, url: str):

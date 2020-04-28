@@ -4,6 +4,11 @@ from app.models import Config, CountryStats, APIService
 
 
 class NovelCOVIDApi(APIService):
+    """
+    Class to handle request to the NOVELCOVID API,
+    see: https://corona.lmao.ninja/docs
+    """
+
     def __init__(self, config: Config):
         super().__init__(config.NOVELCOVID_JHUCSSE_API_URL)
 

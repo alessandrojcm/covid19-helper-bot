@@ -8,8 +8,12 @@ from requests.exceptions import BaseHTTPError
 from fastapi import APIRouter, Form
 
 from app.core import config
-from app.custom_routers import AutopilotRoute
-from app.models import UserDocument
+from app.custom_router import AutopilotRoute
+from app.models import (
+    UserDocument,
+    screening_not_in_danger,
+    screening_pre_results_warning,
+)
 from app.services import capture_message, NovelCOVIDApi
 from app.services.endless_medical_api import EndlessMedicalAPI
 from app.utils import features_mapping, reponse_mappings, outcomes_mapping
@@ -22,6 +26,11 @@ novelcovid_api = NovelCOVIDApi(config)
 
 @self_screening.post("/self-screening/start")
 def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...)):
+    """
+    Starts the screening process
+    :param: UserIdentifier: Phone number from Twilio
+    :param: Memory: JSON Stringified object from Twilio
+    """
     memory = json.loads(Memory)
     twilio = memory.pop("twilio")
 
@@ -31,6 +40,7 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
     user = UserDocument.get_by_phone(UserIdentifier)
 
     try:
+        # Check if user is in db, otherwise we cannot continue
         if start_screening == "Yes" and not user:
             return {
                 "actions": {
@@ -42,9 +52,13 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
                     ]
                 }
             }
-        if start_screening == "Yes" and novelcovid_api.lives_in_risky_zone(
-            user.country
-        ):
+        # Check if the user lives in a COVID-19 affected area
+        lives_in_risky_area = novelcovid_api.lives_in_risky_zone(user.country)
+        # Said yes but is not in risky area
+        if start_screening == "Yes" and not lives_in_risky_area:
+            return screening_not_in_danger
+        # Said yes and IS in risky area, so we can mark the first question as "yes"
+        if start_screening == "Yes" and lives_in_risky_area:
             accept_tos_and_store_session_id(UserIdentifier)
 
             return {
@@ -56,6 +70,7 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
                     {"redirect": "task://self-screening-q-rest"},
                 ]
             }
+        # Continue if user accepts
         if start_screening == "Yes":
             return {
                 "actions": [
@@ -81,6 +96,12 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
 def self_screening_lives_in_area(
     UserIdentifier: str = Form(...), Memory: str = Form(...)
 ):
+    """
+    Checks if the user lives in a COVID-19 affected area, leaved here for legacy reasons; probably
+    does not make sense anymore due to above implementation
+    :param: UserIdentifier: Phone number from Twilio
+    :param: Memory: JSON Stringified object from Twilio
+    """
     memory = json.loads(Memory)
     twilio = memory.pop("twilio")
 
@@ -89,15 +110,7 @@ def self_screening_lives_in_area(
     ]
 
     if start_screening == "No":
-        return {
-            "actions": [
-                {
-                    "say": """Great! Then you probably do't have anything to worry about!
-                                  Feel free to run the test again if you want"""
-                },
-                {"redirect": "task://menu-description"},
-            ]
-        }
+        return screening_not_in_danger
     try:
         accept_tos_and_store_session_id(UserIdentifier)
 
@@ -112,26 +125,23 @@ def self_screening_lives_in_area(
 
 @self_screening.post("/self-screening/analyze-answers")
 def analyze_answers(UserIdentifier: str = Form(...)):
+    """
+    Analyzes the answers given by the user, see that we are not parsing the Memory object,
+    that's because on every questions the answers were validated by the endpoint defined below
+    and added to the Endless Medical API session
+    """
     # We don't need to access collect since arriving here means
     # all answers have been added to the Endless Medical Session
     session_id = UserDocument.get_by_phone(UserIdentifier).endless_medical_token
 
+    # Just an inline function to clean the user
     def reset_session_id_token():
         user = UserDocument.get_by_phone(UserIdentifier)
         user.endless_medical_token = None
         user.update()
 
     try:
-        fix_response: List[Dict[str, str]] = [
-            {
-                "say": """
-                            Please bear in mind that this tool is merely informative.
-                            If, after all, you don't feel ill there should not be any cause for alarm
-                        """
-            },
-            {"redirect": "task://menu-description"},
-        ]
-
+        # Analyse data and get only the posible diseases
         outcomes: List[Dict[str, str]] = endless_medical_api.analyse(session_id)[
             "Diseases"
         ]
@@ -150,7 +160,7 @@ def analyze_answers(UserIdentifier: str = Form(...)):
                                 "say": "You should seek medical attention as soon as possible"
                             }
                         ],
-                        fix_response,
+                        screening_pre_results_warning,
                     )
                 )
             }
@@ -166,11 +176,11 @@ def analyze_answers(UserIdentifier: str = Form(...)):
                                 "you should seek medical attention anyways "
                             }
                         ],
-                        fix_response,
+                        self_screening_lives_in_area,
                     )
                 )
             }
-
+        # User is probably ok
         return {
             "actions": [
                 {
@@ -199,10 +209,13 @@ def add_feature(
     feature: str, UserIdentifier: str = Form(...), ValidateFieldAnswer: str = Form(...)
 ):
     """
-        This endpoint gets called when the user answers a question from the self screening collect,
-        the path param must match the symptoms on the feature_mappings and the answer must match
-        the ones in the response_mapping. If successful, adds the feature to the Endless Medical
-        current session.
+    This endpoint gets called when the user answers a question from the self screening collect,
+    the path param must match the symptoms on the feature_mappings and the answer must match
+    the ones in the response_mapping. If successful, adds the feature to the Endless Medical
+    current session.
+
+    :param: feature: that must match the mapping at features_mapping
+    :param: ValidateFieldAnswer: answer from the user, must match reponse_mappings to be valid
     """
     session_id = UserDocument.get_by_phone(UserIdentifier).endless_medical_token
     try:
@@ -218,6 +231,7 @@ def add_feature(
             reponse_mappings[ValidateFieldAnswer.lower()],
         )
         logger.debug(res)
+        # Result as per the Twilio Docs
         if not res:
             return {"valid": False}
         return {"valid": True}
@@ -229,9 +243,12 @@ def add_feature(
         return {"valid": False}
 
 
-# The following is horrible, but the API response mapping is not... Ideal
-# Helper method to check if an outcome (or any outcome) passes threshold
 def check_outcomes(outcomes: List[Dict[str, str]], name: str = None) -> bool:
+    """
+    The following is horrible, but the API response mapping is not... Ideal
+    Helper method to check if an outcome (or any outcome) passes threshold
+    """
+
     for outcome in outcomes:
         disease_name = list(outcome.keys())[0]
         confidence = float(list(outcome.values())[0])
@@ -244,6 +261,12 @@ def check_outcomes(outcomes: List[Dict[str, str]], name: str = None) -> bool:
 
 
 def accept_tos_and_store_session_id(phone_number: str):
+    """
+    Helper function that:
+    1) Requests a session ID from Endless MEdical
+    2) Accepts the Endless Medical TOS
+    3) Adds the first Feature to the session
+    """
     endless_medical_session_id = endless_medical_api.get_session_token()
     if not endless_medical_api.accept_tos(endless_medical_session_id):
         raise BaseHTTPError("Error accepting Endless Medical TOS")

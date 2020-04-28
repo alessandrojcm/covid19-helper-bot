@@ -18,6 +18,7 @@ def get_application(config) -> Union[FastAPI, SentryAsgiMiddleware]:
     )
     application.exception_handler(StarletteHTTPException)(error_fallback_action)
     application.include_router(router, prefix=config.API_PREFIX)
+    # Quick root route
     application.get("/")(lambda: RedirectResponse(config.API_PREFIX))
 
     if config.ENVIRONMENT == Environments.DEV:

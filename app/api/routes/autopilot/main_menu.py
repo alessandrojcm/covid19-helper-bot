@@ -5,7 +5,7 @@ from fastapi import APIRouter, Form
 from loguru import logger
 
 from app.core import config
-from app.custom_routers import AutopilotRoute
+from app.custom_router import AutopilotRoute
 from app.services import NovelCOVIDApi
 
 main_menu = APIRouter()
@@ -16,6 +16,10 @@ novelcovid_api = NovelCOVIDApi(config)
 @logger.catch
 @main_menu.post("/stats-for-country")
 async def stats_for_country(Memory: str = Form(...)):
+    """
+    Gets the latest data for a single country
+    :param: Memory: JSON Stringified object from Twilio
+    """
     memory = json.loads(Memory)
     twilio = memory.pop("twilio")
 
@@ -30,6 +34,10 @@ async def stats_for_country(Memory: str = Form(...)):
 @logger.catch
 @main_menu.post("/history-for-country")
 async def history_for_country(Memory: str = Form(...)):
+    """
+    Gets the data for a single country on a given date
+    :param: Memory: JSON Stringified object from Twilio
+    """
     memory = json.loads(Memory)
     twilio = memory.pop("twilio")
 

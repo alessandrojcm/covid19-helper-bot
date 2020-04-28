@@ -13,6 +13,11 @@ from app.core.engine import session
 
 
 class DocumentBase(BaseModel):
+    """
+    Base class to handle FaunaDB Documents, has some abstract methods for CRUD operations and
+    generating indexes and schemas. A little ORM-ish
+    """
+
     _collection_name: str
     ref: Optional[Ref]
     ts: Optional[str]

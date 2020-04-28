@@ -5,6 +5,10 @@ from pydantic import BaseModel
 
 
 class CountryStats(BaseModel):
+    """
+    Data bag for country stats
+    """
+
     country_name: str
     iso3_code: str
     deaths: int

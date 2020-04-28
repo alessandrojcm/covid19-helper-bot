@@ -1,8 +1,8 @@
 from typing import Dict
 
 """
-    Here are dictionaries to map the collected responses from autopilot
-    to the features from the Endless Medical API, see: https://www.endlessmedical.com/APIFiles/Features.json
+Here are dictionaries to map the collected responses from autopilot
+to the features from the Endless Medical API, see: https://www.endlessmedical.com/APIFiles/Features.json
 """
 features_mapping: Dict[str, str] = {
     "contact-with-ill-person": "Contacts",
@@ -16,7 +16,7 @@ features_mapping: Dict[str, str] = {
 }
 
 """
-    This contains from collected responses to Endless Medical API valid response values
+This contains from collected responses to Endless Medical API valid response values
 """
 reponse_mappings: Dict[str, int] = {
     "no": 2,
