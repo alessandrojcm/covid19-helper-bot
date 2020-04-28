@@ -614,6 +614,10 @@
             "fields": [],
             "samples": [
                 {
+                    "language": "en-Us",
+                    "taggedText": "menu"
+                },
+                {
                     "language": "en-US",
                     "taggedText": "what is there to do"
                 },
@@ -731,7 +735,7 @@
                 },
                 {
                     "language": "en-US",
-                    "taggedText": "you canoot"
+                    "taggedText": "you cannot"
                 },
                 {
                     "language": "en-US",
