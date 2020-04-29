@@ -288,7 +288,7 @@
                             "questions": [
                                 {
                                     "type": "Twilio.FIRST_NAME",
-                                    "question": "Great! I promise I won't tell anyone",
+                                    "question": "Great! I promise I won't tell anyone, what's your name?",
                                     "name": "first_name",
                                     "prefill": "fist_name"
                                 }
@@ -372,6 +372,26 @@
                 }
             ],
             "samples": [
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Hey I'm felling a little bit sic, can you help me?"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Self checker"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "How you doing hommie? I’m feeling sick, can you help me out with that?"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Self check"
+                },
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Run me through a self checker, let’s see how that goes"
+                },
                 {
                     "language": "en-US",
                     "taggedText": "i'd like to take the test"
@@ -675,7 +695,7 @@
                             "questions": [
                                 {
                                     "type": "Twilio.YES_NO",
-                                    "question": "Can I have your name?",
+                                    "question": "Do you want to tell me your name?",
                                     "name": "can_have_name"
                                 }
                             ]
@@ -683,151 +703,16 @@
                     }
                 ]
             },
-            "fields": [],
+            "fields": [
+                {
+                    "uniqueName": "can_have_name",
+                    "fieldType": "Twilio.YES_NO"
+                }
+            ],
             "samples": [
                 {
                     "language": "en-US",
-                    "taggedText": "yes"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "yeah"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "yep"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "yup"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "sure"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "why not"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "you sure can"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "absolutely"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "hell yeah"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "no"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nope"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nah"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "you cannot"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "hell no"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "negative"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "positive"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "affirmative"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Of course"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Sure"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Affirmative"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Yeah"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Sure"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nope"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "My name is Rafael"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "I'm Rafael"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Yes"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "yes"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "Sure"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "no"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "no"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nope"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nope"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nope"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nope"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "no"
-                },
-                {
-                    "language": "en-US",
-                    "taggedText": "nou"
+                    "taggedText": "{can_have_name}"
                 }
             ]
         },
@@ -837,18 +722,15 @@
                 "actions": [
                     {
                         "redirect": "%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%/greeting"
-                    },
-                    {
-                        "listen": {
-                            "tasks": [
-                                "can-have-name"
-                            ]
-                        }
                     }
                 ]
             },
             "fields": [],
             "samples": [
+                {
+                    "language" : "en-US",
+                    "taggedText" : "Hello ✌🏽"
+                },
                 {
                     "language": "en-US",
                     "taggedText": "greetings"

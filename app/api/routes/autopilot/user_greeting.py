@@ -39,11 +39,11 @@ def greet_user(UserIdentifier: str = Form(...)):
     return {
         "actions": [
             {
-                "say": "Hello there! Looks like you're writing from {country}, great to meet you! Can I have your name?".format(
+                "say": "Hello there! Looks like you're writing from {country}, great to meet you!".format(
                     country=country
                 )
             },
-            {"listen": {"tasks": ["menu-description", "store-user"]}},
+            {"redirect": "task://can-have-name"},
         ]
     }
 
