@@ -65,8 +65,7 @@ async def can_have_name(Memory: str = Form(...)):
     return {
         "actions": [
             {
-                "say": """Ok no biggie! Just keep in mind that I won't be able to offer you all my
-                        capabilities unless I have your name"""
+                "say": """Ok no biggie! Just keep in mind that I won't be able to offer you all my capabilities unless I have your name"""
             },
             {"redirect": "task://menu-description"},
         ]
@@ -82,16 +81,16 @@ def store_user(UserIdentifier: str = Form(...), Memory: str = Form(...)):
     :param: Memory: JSON Stringified object from Twilio
     """
     memory = json.loads(Memory)
-    name = memory["twilio"]["collected_data"]["collect-name"]["answers"]["first_name"][
-        "answer"
-    ]
+    name: str = memory["twilio"]["collected_data"]["collect-name"]["answers"][
+        "first_name"
+    ]["answer"]
 
     try:
         country = phone_to_country(UserIdentifier)
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid phone number")
     new_user = UserDocument(
-        name=name, phone_number=UserIdentifier, country=country
+        name=name.capitalize(), phone_number=UserIdentifier, country=country
     ).save()
 
     return {

@@ -40,17 +40,23 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
     user = UserDocument.get_by_phone(UserIdentifier)
 
     try:
+        if start_screening == "No":
+            return {
+                "actions": [
+                    {"say": "Ok no problem! Let's go back to the menu"},
+                    {"redirect": "task://menu-description"},
+                ]
+            }
+
         # Check if user is in db, otherwise we cannot continue
         if start_screening == "Yes" and not user:
             return {
-                "actions": {
-                    "actions": [
-                        {
-                            "say": "Sorry, I cannot continue until you give me your name \U00012639"
-                        },
-                        {"redirect": "task://can-have-name"},
-                    ]
-                }
+                "actions": [
+                    {
+                        "say": "Sorry, I cannot continue until you give me your name \U00012639"
+                    },
+                    {"redirect": "task://can-have-name"},
+                ]
             }
         # Check if the user lives in a COVID-19 affected area
         lives_in_risky_area = novelcovid_api.lives_in_risky_zone(user.country)
@@ -88,6 +94,9 @@ def self_screening_start(UserIdentifier: str = Form(...), Memory: str = Form(...
         capture_message(err)
         return {"actions": [{"redirect": "task://fallback"}]}
     except BaseHTTPError as err:
+        capture_message(err)
+        return {"actions": [{"redirect": "task://fallback"}]}
+    except Exception as err:
         capture_message(err)
         return {"actions": [{"redirect": "task://fallback"}]}
 
@@ -132,7 +141,11 @@ def analyze_answers(UserIdentifier: str = Form(...)):
     """
     # We don't need to access collect since arriving here means
     # all answers have been added to the Endless Medical Session
-    session_id = UserDocument.get_by_phone(UserIdentifier).endless_medical_token
+    try:
+        session_id = UserDocument.get_by_phone(UserIdentifier).endless_medical_token
+    except AttributeError as err:
+        capture_message(err)
+        return {"actions": {"redirect": "task://fallback"}}
 
     # Just an inline function to clean the user
     def reset_session_id_token():

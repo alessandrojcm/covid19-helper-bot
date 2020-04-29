@@ -86,6 +86,10 @@
             "samples": [
                 {
                     "language": "en-US",
+                    "taggedText": "How was {country_info} on the {historical_date}"
+                },
+                {
+                    "language": "en-US",
                     "taggedText": "how were they doing in {country_info} on {historical_date}"
                 },
                 {
@@ -194,6 +198,18 @@
                 }
             ],
             "samples": [
+                 {
+                    "en-us": "en-US",
+                    "taggedText": "info about {country_info}"
+                },
+                {
+                    "en-us": "en-US",
+                    "taggedText": "how is {country_info}"
+                },
+                {
+                    "language": "en-US",
+                    "taggedText": "How is the {country_info} doing?"
+                },
                 {
                     "language": "en-US",
                     "taggedText": "How are they doing in {country_info}?"
@@ -372,6 +388,10 @@
                 }
             ],
             "samples": [
+                {
+                    "language": "en-US",
+                    "taggedText": "I'd like to self check"
+                },
                 {
                     "language" : "en-US",
                     "taggedText" : "Hey I'm felling a little bit sic, can you help me?"
