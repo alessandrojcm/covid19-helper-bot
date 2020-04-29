@@ -112,7 +112,7 @@ The default environment variables are defined ins `app/models/config` and are as
 The order on which the variables take precedence are:
 
 1) The ones defined in the SO environment
-2) The ones defined in the `.env` file
+2) The ones defined in the `.env` file (can only be used in dev mode)
 3) The defaults on the config schema
 
 For development purposes, just generate the `.env` file with `python main.py generate-env`
@@ -136,12 +136,15 @@ The Autopilot Assistant Schema for this bot lives in `assistant/schema.json`.
 Refer to Twilio [docs](https://www.twilio.com/docs/autopilot/twilio-autopilot-cli) for how to create an assistant
 with the CLI.
 
-Once that's done, replace the `TWILIO_ENDPOINT` with your url; run `python main.py prepare-schema` to prepare the
-assistant schema with the
+Once that's done, replace the `TWILIO_ENDPOINT` with your url; run `python main.py prepare-schema`. This option
+looks for occurrences of `%TWILIO_ENDPOINT%%API_PREFIX%%AUTOPILOT_ENDPOINT_PREFIX%` on the schema and replaces with
+the values defined in the environment (or `.env` file if in dev mode).
 
 Then, open the `after_deploy.sh` script and replace the `--unique-name` flag for your assistant's unique name.
 Run the script with `bash` to update your assistant with the schema (needs `yarn` installed).
-This script is a bit rough on the edges, since it was written ad-hoc for CI/CD.
+This script is a bit rough around the edges, since it was written ad-hoc for CI/CD. In summary, what this script does
+is prepare the schema with the `prepare-schema` command defined above (so you don't need to run that if you use `after_deploy`)
+and uploads the schema to twilio using its cli.
 
 ### For running in local
 
@@ -170,7 +173,7 @@ takes its data from the John Hopkins University repository.
 The [Endless Medical API](https://www.endlessmedical.com/) was used for the analysis of the user symptoms.
 This analysis only serves as guidance and **does not** replace the diagnosis of a doctor.
 
-### Thanks
+### Acknowledgments
 
 Huge thanks to the team of Endless Medical for answering my inquiries and being so helpful overall. And thanks
 to all the friends and family who copped with my annoying "could you please text the bot?"
