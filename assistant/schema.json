@@ -199,11 +199,11 @@
             ],
             "samples": [
                  {
-                    "en-us": "en-US",
+                    "language": "en-US",
                     "taggedText": "info about {country_info}"
                 },
                 {
-                    "en-us": "en-US",
+                    "language": "en-US",
                     "taggedText": "how is {country_info}"
                 },
                 {
@@ -654,7 +654,7 @@
             "fields": [],
             "samples": [
                 {
-                    "language": "en-Us",
+                    "language": "en-US",
                     "taggedText": "menu"
                 },
                 {
