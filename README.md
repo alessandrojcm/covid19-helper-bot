@@ -153,7 +153,7 @@ your API locally from the Twilio Simulator using a SSH tunnel such as ngrok.
 
 ### Deployment
 
-This API comes with a Procfile ready to be deployed on Heroku. But, for running, it will require the following
+This API comes with a Procfile ready to be deployed on Heroku, the only extra configuration you need is to add [this](https://github.com/moneymeets/python-poetry-buildpack) buildpack in order for Heroku to support Poetry. But, for running, it will require the following
 envs to be present:
 
 * `FAUNA_SERVER_KEY`
